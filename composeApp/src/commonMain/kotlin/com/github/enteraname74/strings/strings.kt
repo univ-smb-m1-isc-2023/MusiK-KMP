@@ -16,4 +16,8 @@ val appStrings = when(Locale.current.language) {
 interface ApplicationStrings {
     val appName: String get() = "MusiK"
     val welcome: String
+
+
+    /***** Fetching strings ******/
+    val fetchingAllMusics: String
 }

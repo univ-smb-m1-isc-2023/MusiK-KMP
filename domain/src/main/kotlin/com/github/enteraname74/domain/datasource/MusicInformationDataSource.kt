@@ -10,5 +10,5 @@ interface MusicInformationDataSource {
     /**
      * Retrieve all musics information.
      */
-    fun getAll(): List<Music>
+    suspend fun getAll(): List<Music>
 }
