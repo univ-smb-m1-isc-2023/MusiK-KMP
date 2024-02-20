@@ -8,7 +8,7 @@ import org.koin.dsl.module
 actual val appModule: Module = module {
     viewModel {
         MainActivityViewModelImpl(
-            musicService = get()
+            musicInformationDataSource = get()
         )
     }
 }
