@@ -17,7 +17,7 @@ class PlayerService : Service(){
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
         notification?.let {
-            startForeground(MusikNotification.CHANNEL_ID, it.getNotification())
+            startForeground(MusikNotification.CHANNEL_ID, it.getPlaybackNotification())
         }
 
         return START_STICKY

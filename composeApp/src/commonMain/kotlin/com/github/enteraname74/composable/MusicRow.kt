@@ -15,6 +15,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.github.enteraname74.Constants
 import com.github.enteraname74.domain.model.Music
+import com.github.enteraname74.theme.MusikColorTheme
 
 /**
  * Represent a row with information about of a Music.
@@ -46,11 +47,13 @@ fun MusicRow(
                     text = music.name,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
+                    color = MusikColorTheme.colorScheme.onPrimary
                 )
                 Text(
                     text = "${music.artist} | ${music.album}",
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
+                    color = MusikColorTheme.colorScheme.onPrimary
                 )
 
             }

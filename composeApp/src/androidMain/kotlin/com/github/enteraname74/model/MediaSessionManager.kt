@@ -110,7 +110,7 @@ class MediaSessionManager(
     /**
      * Update the state of the player's media session.
      */
-    private fun updateState() {
+    fun updateState() {
         val musicState = if (playbackController.isPlaying) {
             PlaybackState.STATE_PLAYING
         } else {

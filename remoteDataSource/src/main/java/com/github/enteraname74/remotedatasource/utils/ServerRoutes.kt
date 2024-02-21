@@ -1,10 +1,10 @@
-package com.github.enteraname74.domain.utils
+package com.github.enteraname74.remotedatasource.utils
 
 /**
  * Routes used to communicate with the server.
  */
 object ServerRoutes {
-    private const val SERVER_IP = "0.0.0.0"
+    private const val SERVER_IP = "192.168.144.141"
     private const val SERVER_PORT = "8080"
     private const val SERVER_ADDRESS = "http://$SERVER_IP:$SERVER_PORT"
 
@@ -42,6 +42,6 @@ object ServerRoutes {
          *
          * @param id the id of the music to retrieve.
          */
-        fun get(id: String) = "${MAIN_ROUTE}/$id"
+        fun get(id: String) = "$MAIN_ROUTE/$id"
     }
 }

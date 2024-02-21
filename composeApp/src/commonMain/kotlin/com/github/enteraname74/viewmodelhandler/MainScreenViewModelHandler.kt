@@ -22,9 +22,9 @@ open class MainScreenViewModelHandler(
     val state = _state.asStateFlow()
     
     /**
-     * Manage events of the Main screen view model.
+     * Manage events of the main screen.
      */
-    open fun onEvent(event: MainScreenEvent) {
+    fun onEvent(event: MainScreenEvent) {
         coroutineScope.launch {
             when(event) {
                 MainScreenEvent.FetchMusics -> fetchAllMusics()

@@ -6,7 +6,6 @@ import com.github.enteraname74.domain.model.Music
  * Represent the player used by the application.
  */
 interface MusikPlayer {
-
     /**
      * Set a song to the player.
      */
@@ -49,9 +48,9 @@ interface MusikPlayer {
     fun isPlaying(): Boolean
 
     /**
-     * Dismiss the player.
+     * Release the player.
      */
-    fun dismiss()
+    fun release()
 
     /**
      * Retrieve the current music duration.

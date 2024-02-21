@@ -8,19 +8,23 @@ import android.content.IntentFilter
 import android.os.Build
 import android.util.Log
 import com.github.enteraname74.domain.model.Music
+import com.github.enteraname74.event.PlayerScreenEvent
 import com.github.enteraname74.model.notification.MusikNotificationBuilder
+import com.github.enteraname74.viewmodel.PlayerScreenViewModelImpl
 
 /**
  * Implementation of the PlaybackController.
  * It manages the player, service, media session and notification.
  */
 class PlaybackControllerImpl(
-    private val context: Context
+    private val context: Context,
 ): PlaybackController {
     override var initialList: ArrayList<Music> = ArrayList()
     override var playedList: ArrayList<Music> = ArrayList()
     override var currentMusic: Music? = null
+
     private var shouldLaunchService: Boolean = true
+    private var shouldInit: Boolean = true
 
     private val mediaSessionManager = MediaSessionManager(
         context = context,
@@ -31,6 +35,8 @@ class PlaybackControllerImpl(
         context = context,
         playbackController =  this
     )
+
+    var playerViewModel: PlayerScreenViewModelImpl? = null
 
     private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -47,11 +53,16 @@ class PlaybackControllerImpl(
         }
     }
 
+    init {
+        init()
+    }
+
     /**
      * Initialize the playback manager.
      */
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
-    fun init() {
+    private fun init() {
+        Log.d("PLAYBACK CONTROLLER", "INIT")
         if (Build.VERSION.SDK_INT >= 33) {
             context.registerReceiver(
                 broadcastReceiver,
@@ -75,6 +86,7 @@ class PlaybackControllerImpl(
         notification.init(currentMusic)
         PlayerService.notification = notification
         shouldLaunchService = true
+        shouldInit = false
     }
 
     /**
@@ -118,7 +130,13 @@ class PlaybackControllerImpl(
     override val isPlaying: Boolean
         get() = player.isPlaying()
 
+    override fun setPlayerLists(musics: List<Music>) {
+        initialList = ArrayList(musics)
+        playedList = ArrayList(musics)
+    }
+
     override fun setAndPlayMusic(music: Music) {
+        if (shouldInit) init()
 
         if (shouldLaunchService) {
             val serviceIntent = Intent(context, PlayerService::class.java)
@@ -180,16 +198,32 @@ class PlaybackControllerImpl(
     override fun getCurrentMusicPosition(): Int = player.getMusicPosition()
 
     override fun stopPlayback() {
+        if (shouldInit) return
+        Log.d("PLAYBACK CONTROLLER", "STOP")
+
         context.unregisterReceiver(broadcastReceiver)
-        mediaSessionManager.release()
+        player.release()
+//        mediaSessionManager.release()
+
         PlayerService.notification?.release()
         val serviceIntent = Intent(context, PlayerService::class.java)
         context.stopService(serviceIntent)
+
+        shouldInit = true
+        playedList = ArrayList()
+        initialList = ArrayList()
     }
 
     override fun update() {
         mediaSessionManager.updateMetadata()
+        mediaSessionManager.updateState()
         PlayerService.notification?.update(isPlaying)
+        playerViewModel?.handler?.onEvent(PlayerScreenEvent.UpdatePlayedMusic(
+            music = currentMusic
+        ))
+        playerViewModel?.handler?.onEvent(PlayerScreenEvent.UpdateIsPlaying(
+            isPlaying = player.isPlaying()
+        ))
     }
 
     override fun skipAndRemoveCurrentSong() {
@@ -197,7 +231,7 @@ class PlaybackControllerImpl(
 
         val currentIndex = getIndexOfCurrentMusic()
         val nextMusic = getNextMusic(currentIndex)
-        
+
         playedList.removeIf{ it.id == currentMusic!!.id }
         initialList.removeIf { it.id == currentMusic!!.id }
 

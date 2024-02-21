@@ -1,6 +1,7 @@
 package com.github.enteraname74.viewmodel
 
 import com.github.enteraname74.viewmodelhandler.MainScreenViewModelHandler
+import com.github.enteraname74.viewmodelhandler.PlayerViewModelHandler
 import com.github.enteraname74.viewmodelhandler.ViewModelHandler
 
 /**
@@ -21,3 +22,8 @@ interface MusikViewModel<Handler: ViewModelHandler> {
  * ViewModel for the main screen.
  */
 typealias MainScreenViewModel = MusikViewModel<MainScreenViewModelHandler>
+
+/**
+ * ViewModel for the player screen.
+ */
+typealias PlayerScreenViewModel = MusikViewModel<PlayerViewModelHandler>

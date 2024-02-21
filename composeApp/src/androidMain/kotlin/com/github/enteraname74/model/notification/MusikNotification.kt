@@ -77,7 +77,7 @@ abstract class MusikNotification(
     /**
      * Return the instance of the Notification for the app notification.
      */
-    fun getNotification(): Notification {
+    fun getPlaybackNotification(): Notification {
         return notification
     }
 

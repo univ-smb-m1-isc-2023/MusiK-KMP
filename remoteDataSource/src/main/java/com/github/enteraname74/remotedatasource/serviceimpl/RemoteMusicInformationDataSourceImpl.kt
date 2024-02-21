@@ -4,7 +4,7 @@ import com.github.enteraname74.domain.datasource.MusicInformationDataSource
 import com.github.enteraname74.domain.model.Music
 import com.github.enteraname74.remotedatasource.model.RemoteMusic
 import com.github.enteraname74.remotedatasource.model.toMusic
-import com.github.enteraname74.domain.utils.ServerRoutes
+import com.github.enteraname74.remotedatasource.utils.ServerRoutes
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO

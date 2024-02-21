@@ -5,7 +5,7 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.util.Log
 import com.github.enteraname74.domain.model.Music
-import com.github.enteraname74.domain.utils.ServerRoutes
+import com.github.enteraname74.remotedatasource.utils.ServerRoutes
 import kotlinx.coroutines.runBlocking
 
 class RemoteMusikPlayer(
@@ -16,13 +16,15 @@ class RemoteMusikPlayer(
     MediaPlayer.OnPreparedListener,
     MediaPlayer.OnErrorListener {
 
-    private val player: MediaPlayer = MediaPlayer()
+    private var player: MediaPlayer = MediaPlayer()
     private val audioManager: PlayerAudioManager = PlayerAudioManager(context, this)
 
     /**
      * Initialize the player (add listeners and set audio attributes).
      */
     fun init() {
+        audioManager.init()
+        player = MediaPlayer()
         player.apply {
             setAudioAttributes(audioManager.audioAttributes)
             setOnPreparedListener(this@RemoteMusikPlayer)
@@ -89,7 +91,7 @@ class RemoteMusikPlayer(
 
     override fun isPlaying(): Boolean = player.isPlaying
 
-    override fun dismiss() {
+    override fun release() {
         player.release()
         audioManager.release()
     }

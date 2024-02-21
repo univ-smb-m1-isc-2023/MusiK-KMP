@@ -30,6 +30,11 @@ interface PlaybackController{
     val isPlaying: Boolean
 
     /**
+     * Set the lists used by the player (played and initial list).
+     */
+    fun setPlayerLists(musics: List<Music>)
+
+    /**
      * Set and play a Music.
      */
     fun setAndPlayMusic(music: Music)

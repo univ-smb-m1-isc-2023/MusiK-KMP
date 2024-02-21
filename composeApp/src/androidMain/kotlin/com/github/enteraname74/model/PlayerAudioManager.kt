@@ -17,7 +17,7 @@ class PlayerAudioManager(
     private val player: MusikPlayer
 ): AudioManager.OnAudioFocusChangeListener {
     private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-    val audioAttributes = AudioAttributes.Builder()
+    val audioAttributes: AudioAttributes = AudioAttributes.Builder()
         .setUsage(AudioAttributes.USAGE_MEDIA)
         .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
         .build()
@@ -31,6 +31,13 @@ class PlayerAudioManager(
         override fun onReceive(context: Context?, intent: Intent?) {
             player.pause()
         }
+    }
+
+    /**
+     * Initialize the audio manager.
+     */
+    fun init() {
+        manageAudioBecomingNoisy()
     }
 
     /**
