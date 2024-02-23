@@ -16,13 +16,15 @@ class MediaSessionManager(
     private val context: Context,
     private val playbackController: PlaybackController
 ) {
-    private val mediaSession: MediaSessionCompat = MediaSessionCompat(context, context.packageName + "MusikMediaSession")
+    private var mediaSession: MediaSessionCompat = MediaSessionCompat(context, context.packageName + "MusikMediaSession")
 
     /**
      * Initialize the media session used by the player.
      */
     @Suppress("DEPRECATION")
     fun init() {
+        mediaSession = MediaSessionCompat(context, context.packageName + "MusikMediaSession")
+
         mediaSession.setCallback(object : MediaSessionCompat.Callback() {
             override fun onSeekTo(pos: Long) {
                 playbackController.seekToPosition(pos.toInt())

@@ -9,6 +9,7 @@ import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
@@ -84,7 +85,8 @@ class MainActivity : ComponentActivity() {
                     }
 
                     val playerScreenSwipeableState = rememberSwipeableState(
-                        initialValue = PlayerScreenSheetStates.COLLAPSED
+                        initialValue = PlayerScreenSheetStates.COLLAPSED,
+                        animationSpec = tween(Constants.AnimationDuration.normal)
                     )
 
                     MainScreen(

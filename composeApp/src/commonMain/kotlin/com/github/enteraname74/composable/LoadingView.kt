@@ -4,15 +4,17 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.github.enteraname74.theme.MusikColorTheme
 
 /**
- * Used to show when loading something.
+ * Used to show the state of something.
  */
 @Composable
-fun LoadingView(
+fun StateView(
     message: String
 ) {
     Column(
@@ -21,6 +23,10 @@ fun LoadingView(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(message)
+        Text(
+            style = MaterialTheme.typography.bodyLarge,
+            text = message,
+            color = MusikColorTheme.colorScheme.onPrimary
+        )
     }
 }

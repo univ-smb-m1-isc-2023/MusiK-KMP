@@ -20,4 +20,8 @@ interface ApplicationStrings {
 
     /***** Fetching strings ******/
     val fetchingAllMusics: String
+    val noMusicsFound: String
+
+    /**** Search screen strings *****/
+    val allMusicsPlaceholder: String
 }

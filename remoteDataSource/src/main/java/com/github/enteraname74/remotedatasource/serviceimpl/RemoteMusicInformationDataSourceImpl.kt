@@ -23,13 +23,18 @@ class RemoteMusicInformationDataSourceImpl: MusicInformationDataSource {
         }
     }
     override suspend fun getAll(): List<Music> {
-        val response = client.get(ServerRoutes.MusicInformation.ALL)
+        return try {
+            val response = client.get(ServerRoutes.MusicInformation.ALL)
 
-        return if (!response.status.isSuccess()) {
+            if (!response.status.isSuccess()) {
+                emptyList()
+            } else {
+                val remoteMusicList: List<RemoteMusic> = response.body()
+                remoteMusicList.map { it.toMusic() }
+            }
+        } catch (_: Exception) {
             emptyList()
-        } else {
-            val remoteMusicList: List<RemoteMusic> = response.body()
-            remoteMusicList.map { it.toMusic() }
         }
+
     }
 }

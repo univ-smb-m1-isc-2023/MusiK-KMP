@@ -83,7 +83,7 @@ abstract class MusikNotification(
 
     /**
      * Dismiss the notification.
-     * It will cancel the notification and unregister the broadcast receiver linked to it.
+     * It will cancel the notification and unregister any broadcast receiver linked to it.
      */
     fun release() {
         val notificationManager =

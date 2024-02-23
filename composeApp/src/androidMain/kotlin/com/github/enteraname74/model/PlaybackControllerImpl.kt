@@ -9,7 +9,6 @@ import android.os.Build
 import android.util.Log
 import com.github.enteraname74.domain.model.Music
 import com.github.enteraname74.event.PlayerScreenEvent
-import com.github.enteraname74.model.notification.MusikNotificationBuilder
 import com.github.enteraname74.viewmodel.PlayerScreenViewModelImpl
 
 /**
@@ -78,13 +77,6 @@ class PlaybackControllerImpl(
 
         player.init()
         mediaSessionManager.init()
-
-        val notification = MusikNotificationBuilder.buildNotification(
-            context = context,
-            mediaSessionToken = mediaSessionManager.getToken(),
-        )
-        notification.init(currentMusic)
-        PlayerService.notification = notification
         shouldLaunchService = true
         shouldInit = false
     }
@@ -136,10 +128,12 @@ class PlaybackControllerImpl(
     }
 
     override fun setAndPlayMusic(music: Music) {
+        Log.d("CONTROLLER", "SET AND PLAY MUSIC")
         if (shouldInit) init()
 
         if (shouldLaunchService) {
             val serviceIntent = Intent(context, PlayerService::class.java)
+            serviceIntent.putExtra(PlayerService.MEDIA_SESSION_TOKEN, mediaSessionManager.getToken())
             context.startForegroundService(serviceIntent)
             shouldLaunchService = false
         }
@@ -203,9 +197,8 @@ class PlaybackControllerImpl(
 
         context.unregisterReceiver(broadcastReceiver)
         player.release()
-//        mediaSessionManager.release()
+        mediaSessionManager.release()
 
-        PlayerService.notification?.release()
         val serviceIntent = Intent(context, PlayerService::class.java)
         context.stopService(serviceIntent)
 
@@ -217,12 +210,16 @@ class PlaybackControllerImpl(
     override fun update() {
         mediaSessionManager.updateMetadata()
         mediaSessionManager.updateState()
-        PlayerService.notification?.update(isPlaying)
+
+        val intentForUpdatingNotification = Intent(PlayerService.SERVICE_BROADCAST)
+        intentForUpdatingNotification.putExtra(PlayerService.UPDATE_WITH_PLAYING_STATE, isPlaying)
+        context.sendBroadcast(intentForUpdatingNotification)
+
         playerViewModel?.handler?.onEvent(PlayerScreenEvent.UpdatePlayedMusic(
             music = currentMusic
         ))
         playerViewModel?.handler?.onEvent(PlayerScreenEvent.UpdateIsPlaying(
-            isPlaying = player.isPlaying()
+            isPlaying = isPlaying
         ))
     }
 

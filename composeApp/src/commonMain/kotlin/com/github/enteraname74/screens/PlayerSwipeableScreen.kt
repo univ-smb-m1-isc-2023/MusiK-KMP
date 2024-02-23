@@ -26,7 +26,6 @@ import androidx.compose.material.SwipeableState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.swipeable
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -50,8 +49,6 @@ import com.github.enteraname74.composable.AppImage
 import com.github.enteraname74.composable.MusikBackHandler
 import com.github.enteraname74.composable.playbuttons.ExpandedPlayButtonsComposable
 import com.github.enteraname74.composable.playbuttons.MinimisedPlayButtonsComposable
-import com.github.enteraname74.domain.model.Music
-import com.github.enteraname74.event.PlayerScreenEvent
 import com.github.enteraname74.model.PlaybackController
 import com.github.enteraname74.theme.MusikColorTheme
 import com.github.enteraname74.type.PlayerScreenSheetStates
