@@ -124,5 +124,11 @@ class RemoteMusikPlayer(
         return true
     }
 
-    override fun getMusicDuration(): Int = player.duration
+    override fun getMusicDuration(): Int {
+        return try {
+            player.duration
+        } catch (_: Exception) {
+            0
+        }
+    }
 }

@@ -4,11 +4,13 @@ import android.annotation.SuppressLint
 import android.content.res.Configuration
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import com.github.enteraname74.type.ScreenOrientation
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 /**
  * Contains all elements related to a specific context of a MusiK application.
@@ -40,6 +42,28 @@ actual object MusikContext {
             )
         }
         return painterResource(id = drawableId)
+    }
+
+    /**
+     * Define the system bars color if there is any.
+     */
+    @Composable
+    actual fun setSystemBarsColor(
+        statusBarColor: Color,
+        navigationBarColor: Color,
+        isUsingDarkIcons: Boolean
+    ) {
+        val systemUiController = rememberSystemUiController()
+
+        systemUiController.setStatusBarColor(
+            color = statusBarColor,
+            darkIcons = isUsingDarkIcons
+        )
+
+        systemUiController.setNavigationBarColor(
+            color = navigationBarColor,
+            darkIcons = isUsingDarkIcons
+        )
     }
 
 }

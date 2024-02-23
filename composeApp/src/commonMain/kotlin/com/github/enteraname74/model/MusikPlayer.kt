@@ -54,6 +54,7 @@ interface MusikPlayer {
 
     /**
      * Retrieve the current music duration.
+     * Returns 0 if no song is being played.
      */
     fun getMusicDuration(): Int
 }

@@ -77,7 +77,7 @@ class MediaSessionManager(
      *
      * TODO: Take artwork into account.
      */
-    fun updateMetadata() {
+    fun updateMetadata(){
         mediaSession.setMetadata(
             MediaMetadataCompat.Builder()
                 .putLong(

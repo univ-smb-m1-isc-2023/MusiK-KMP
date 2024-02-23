@@ -10,10 +10,18 @@ sealed interface PlayerScreenEvent {
     /**
      * Used for updating the view of the currently played song.
      */
-    data class UpdatePlayedMusic(val music: Music?): PlayerScreenEvent
+    data class UpdatePlayedMusic(
+        val music: Music?,
+        val duration: Int
+    ): PlayerScreenEvent
 
     /**
      * Used for showing is a music is being played.
      */
     data class UpdateIsPlaying(val isPlaying: Boolean): PlayerScreenEvent
+
+    /**
+     * Used for updating the position in the current played music.
+     */
+    data class UpdatePositionInCurrentMusic(val position: Int): PlayerScreenEvent
 }

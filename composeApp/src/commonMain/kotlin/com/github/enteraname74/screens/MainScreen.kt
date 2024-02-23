@@ -32,8 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import com.github.enteraname74.Constants
-import com.github.enteraname74.composable.StateView
 import com.github.enteraname74.composable.MusicRow
+import com.github.enteraname74.composable.StateView
 import com.github.enteraname74.composable.search.SearchMusics
 import com.github.enteraname74.composable.search.SearchView
 import com.github.enteraname74.domain.model.Music

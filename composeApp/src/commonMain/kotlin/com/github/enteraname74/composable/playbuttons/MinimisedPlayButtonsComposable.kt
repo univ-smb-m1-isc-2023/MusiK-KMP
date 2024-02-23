@@ -26,7 +26,7 @@ import com.github.enteraname74.type.PlayerScreenSheetStates
 @Composable
 fun MinimisedPlayButtonsComposable(
     modifier: Modifier = Modifier,
-    playerViewDraggableState: SwipeableState<PlayerScreenSheetStates>,
+    playerScreenSwipeableState: SwipeableState<PlayerScreenSheetStates>,
     playbackController: PlaybackController,
     isPlaying: Boolean
 ) {
@@ -41,7 +41,7 @@ fun MinimisedPlayButtonsComposable(
             modifier = Modifier
                 .size(40.dp)
                 .clickable {
-                    if (playerViewDraggableState.currentValue == PlayerScreenSheetStates.MINIMISED) {
+                    if (playerScreenSwipeableState.currentValue == PlayerScreenSheetStates.MINIMISED) {
                         playbackController.previous()
                     }
                 },
@@ -54,7 +54,7 @@ fun MinimisedPlayButtonsComposable(
                 modifier = Modifier
                     .size(40.dp)
                     .clickable {
-                        if (playerViewDraggableState.currentValue == PlayerScreenSheetStates.MINIMISED) {
+                        if (playerScreenSwipeableState.currentValue == PlayerScreenSheetStates.MINIMISED) {
                             playbackController.togglePlayPause()
                         }
                     },
@@ -67,7 +67,7 @@ fun MinimisedPlayButtonsComposable(
                 modifier = Modifier
                     .size(40.dp)
                     .clickable {
-                        if (playerViewDraggableState.currentValue == PlayerScreenSheetStates.MINIMISED) {
+                        if (playerScreenSwipeableState.currentValue == PlayerScreenSheetStates.MINIMISED) {
                             playbackController.togglePlayPause()
                         }
                     },
@@ -80,7 +80,7 @@ fun MinimisedPlayButtonsComposable(
             modifier = Modifier
                 .size(40.dp)
                 .clickable {
-                    if (playerViewDraggableState.currentValue == PlayerScreenSheetStates.MINIMISED) {
+                    if (playerScreenSwipeableState.currentValue == PlayerScreenSheetStates.MINIMISED) {
                         playbackController.next()
                     }
                 },

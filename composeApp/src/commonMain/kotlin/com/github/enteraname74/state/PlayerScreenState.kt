@@ -7,5 +7,7 @@ import com.github.enteraname74.domain.model.Music
  */
 data class PlayerScreenState(
     val currentMusic: Music? = null,
-    val isPlaying: Boolean = false
+    val currentMusicDuration: Int = 0,
+    val isPlaying: Boolean = false,
+    val currentPositionInMusic: Int = 0
 )

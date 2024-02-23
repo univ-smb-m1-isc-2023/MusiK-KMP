@@ -1,10 +1,7 @@
 package com.github.enteraname74.viewmodelhandler
 
-import android.util.Log
-import com.github.enteraname74.domain.model.Music
 import com.github.enteraname74.event.PlayerScreenEvent
 import com.github.enteraname74.state.PlayerScreenState
-import com.github.enteraname74.theme.ColorThemeManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,8 +23,9 @@ open class PlayerViewModelHandler(
     fun onEvent(event: PlayerScreenEvent) {
         coroutineScope.launch {
             when(event) {
-                is PlayerScreenEvent.UpdatePlayedMusic -> updatePlayerMusic(event.music)
+                is PlayerScreenEvent.UpdatePlayedMusic -> updatePlayerMusic(event)
                 is PlayerScreenEvent.UpdateIsPlaying -> updatePlayingState(event.isPlaying)
+                is PlayerScreenEvent.UpdatePositionInCurrentMusic -> updateCurrentPositionInMusic(event.position)
             }
         }
     }
@@ -35,11 +33,11 @@ open class PlayerViewModelHandler(
     /**
      * Update the currently played music to show on the player screen.
      */
-    protected open fun updatePlayerMusic(currentMusic: Music?) {
-        Log.d("VM HANDLER", "MUSIC: $currentMusic")
+    protected open fun updatePlayerMusic(data: PlayerScreenEvent.UpdatePlayedMusic) {
         _state.update {
             it.copy(
-                currentMusic = currentMusic
+                currentMusic = data.music,
+                currentMusicDuration = data.duration
             )
         }
     }
@@ -48,10 +46,20 @@ open class PlayerViewModelHandler(
      * Update the state of playing.
      */
     protected open fun updatePlayingState(playing: Boolean) {
-        Log.d("VM HANDLER", "IS PLAYING: $playing")
         _state.update {
             it.copy(
                 isPlaying = playing
+            )
+        }
+    }
+
+    /**
+     * Update the current position in the music.
+     */
+    protected open fun updateCurrentPositionInMusic(position: Int) {
+        _state.update {
+            it.copy(
+                currentPositionInMusic = position
             )
         }
     }

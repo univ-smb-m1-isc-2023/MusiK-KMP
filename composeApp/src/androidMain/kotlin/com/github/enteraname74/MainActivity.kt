@@ -73,7 +73,6 @@ class MainActivity : ComponentActivity() {
             playbackController.playerViewModel = playerScreenViewModel
 
             MusikTheme {
-
                 BoxWithConstraints(
                     modifier = Modifier
                         .fillMaxSize()

@@ -1,5 +1,6 @@
 package com.github.enteraname74.screens
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -7,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -26,6 +28,7 @@ import androidx.compose.material.SwipeableState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.swipeable
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -34,6 +37,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
@@ -65,10 +69,70 @@ fun PlayerSwipeableScreen(
     maxHeight: Float,
     swipeableState: SwipeableState<PlayerScreenSheetStates>,
     playerScreenViewModel: PlayerScreenViewModel,
-    playbackController: PlaybackController
+    playbackController: PlaybackController,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val state by playerScreenViewModel.handler.state.collectAsState()
+
+    val backgroundColor: Color by animateColorAsState(
+        targetValue = when (swipeableState.currentValue) {
+            PlayerScreenSheetStates.MINIMISED, PlayerScreenSheetStates.COLLAPSED -> MusikColorTheme.colorScheme.secondary
+            PlayerScreenSheetStates.EXPANDED -> MusikColorTheme.colorScheme.primary
+        },
+        tween(Constants.AnimationDuration.normal),
+        label = "BACKGROUND_COLOR_PLAYER_SCREEN"
+    )
+    val textColor: Color by animateColorAsState(
+        targetValue = when (swipeableState.currentValue) {
+            PlayerScreenSheetStates.COLLAPSED, PlayerScreenSheetStates.MINIMISED -> MusikColorTheme.colorScheme.onPrimary
+            PlayerScreenSheetStates.EXPANDED -> MusikColorTheme.defaultTheme.onPrimary
+        },
+        tween(Constants.AnimationDuration.normal),
+        label = "TEXT_COLOR_COLOR_PLAYER_SCREEN"
+    )
+
+    val subTextColor: Color by animateColorAsState(
+        targetValue = when (swipeableState.currentValue) {
+            PlayerScreenSheetStates.COLLAPSED, PlayerScreenSheetStates.MINIMISED -> MusikColorTheme.colorScheme.subText
+            PlayerScreenSheetStates.EXPANDED -> MusikColorTheme.defaultTheme.subText
+        },
+        tween(Constants.AnimationDuration.normal),
+        label = "SUB_TEXT_COLOR_COLOR_PLAYER_SCREEN"
+    )
+
+
+    val contentColor: Color by animateColorAsState(
+        targetValue = when (swipeableState.currentValue) {
+            PlayerScreenSheetStates.COLLAPSED, PlayerScreenSheetStates.MINIMISED -> MusikColorTheme.colorScheme.secondary
+            PlayerScreenSheetStates.EXPANDED -> MaterialTheme.colorScheme.secondary
+        },
+        tween(Constants.AnimationDuration.normal),
+        label = "CONTENT_COLOR_COLOR_PLAYER_SCREEN"
+    )
+
+    val statusBarColor: Color by animateColorAsState(
+        targetValue = when (swipeableState.currentValue) {
+            PlayerScreenSheetStates.MINIMISED, PlayerScreenSheetStates.COLLAPSED -> MusikColorTheme.colorScheme.primary
+            PlayerScreenSheetStates.EXPANDED -> MusikColorTheme.colorScheme.primary
+        },
+        tween(Constants.AnimationDuration.normal),
+        label = "STATUS_BAR_COLOR_COLOR_PLAYER_SCREEN"
+    )
+
+    val navigationBarColor: Color by animateColorAsState(
+        targetValue = when (swipeableState.currentValue) {
+            PlayerScreenSheetStates.COLLAPSED -> MusikColorTheme.colorScheme.primary
+            PlayerScreenSheetStates.MINIMISED -> MusikColorTheme.colorScheme.secondary
+            PlayerScreenSheetStates.EXPANDED -> MusikColorTheme.colorScheme.secondary
+        }, tween(Constants.AnimationDuration.normal),
+        label = "NAVIGATION_BAR_COLOR_COLOR_PLAYER_SCREEN"
+    )
+
+    MusikContext.setSystemBarsColor(
+        statusBarColor = statusBarColor,
+        navigationBarColor = navigationBarColor,
+        isUsingDarkIcons = !isSystemInDarkTheme()
+    )
 
     MusikBackHandler(
         enabled = swipeableState.currentValue == PlayerScreenSheetStates.EXPANDED
@@ -154,7 +218,7 @@ fun PlayerSwipeableScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = MusikColorTheme.colorScheme.secondary)
+                .background(color = backgroundColor)
                 .then(mainBoxClickableModifier)
         ) {
             BoxWithConstraints(
@@ -242,6 +306,20 @@ fun PlayerSwipeableScreen(
                     )
                 }
 
+                val backImageClickableModifier =
+                    if (swipeableState.currentValue != PlayerScreenSheetStates.EXPANDED) {
+                        Modifier
+                    } else {
+                        Modifier.clickable {
+                            coroutineScope.launch {
+                                swipeableState.animateTo(
+                                    PlayerScreenSheetStates.MINIMISED,
+                                    tween(Constants.AnimationDuration.normal)
+                                )
+                            }
+                        }
+                    }
+
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -258,8 +336,9 @@ fun PlayerSwipeableScreen(
                             imageVector = Icons.Rounded.KeyboardArrowDown,
                             contentDescription = "",
                             modifier = Modifier
-                                .size(Constants.ImageSize.medium),
-                            colorFilter = ColorFilter.tint(MusikColorTheme.colorScheme.onSecondary),
+                                .size(Constants.ImageSize.medium)
+                                .then(backImageClickableModifier),
+                            colorFilter = ColorFilter.tint(textColor),
                             alpha = alphaTransition
                         )
                         Column(
@@ -273,7 +352,7 @@ fun PlayerSwipeableScreen(
                         ) {
                             Text(
                                 text = state.currentMusic?.name ?: "",
-                                color = MusikColorTheme.colorScheme.onSecondary,
+                                color = textColor,
                                 maxLines = 1,
                                 textAlign = TextAlign.Center,
                                 fontSize = 18.sp,
@@ -292,7 +371,7 @@ fun PlayerSwipeableScreen(
                                         state.currentMusic?.artist ?: "",
                                         MusikContext.orientation
                                     ),
-                                    color = MusikColorTheme.colorScheme.subText,
+                                    color = subTextColor,
                                     fontSize = 15.sp,
                                     maxLines = 1,
                                     textAlign = TextAlign.Center,
@@ -300,7 +379,7 @@ fun PlayerSwipeableScreen(
                                 )
                                 Text(
                                     text = " | ",
-                                    color = MusikColorTheme.colorScheme.subText,
+                                    color = subTextColor,
                                     fontSize = 15.sp,
                                 )
                                 Text(
@@ -308,7 +387,7 @@ fun PlayerSwipeableScreen(
                                         state.currentMusic?.album ?: "",
                                         MusikContext.orientation
                                     ),
-                                    color = MusikColorTheme.colorScheme.subText,
+                                    color = subTextColor,
                                     fontSize = 15.sp,
                                     maxLines = 1,
                                     textAlign = TextAlign.Center,
@@ -334,7 +413,11 @@ fun PlayerSwipeableScreen(
                                     widthFraction = 0.45f,
                                     paddingBottom = 0.dp,
                                     playbackController = playbackController,
-                                    isPlaying = state.isPlaying
+                                    isPlaying = state.isPlaying,
+                                    primaryColor = textColor,
+                                    sliderInactiveBarColor = contentColor,
+                                    currentPosition = state.currentPositionInMusic,
+                                    musicDuration = state.currentMusicDuration
                                 )
                             }
                         }
@@ -342,7 +425,11 @@ fun PlayerSwipeableScreen(
                         else -> {
                             ExpandedPlayButtonsComposable(
                                 playbackController = playbackController,
-                                isPlaying = state.isPlaying
+                                isPlaying = state.isPlaying,
+                                primaryColor = textColor,
+                                sliderInactiveBarColor = contentColor,
+                                currentPosition = state.currentPositionInMusic,
+                                musicDuration = state.currentMusicDuration
                             )
                         }
                     }
@@ -368,7 +455,7 @@ fun PlayerSwipeableScreen(
                     ) {
                         Text(
                             text = state.currentMusic?.name ?: "",
-                            color = MusikColorTheme.colorScheme.onSecondary,
+                            color = textColor,
                             maxLines = 1,
                             textAlign = TextAlign.Start,
                             fontSize = 15.sp,
@@ -376,7 +463,7 @@ fun PlayerSwipeableScreen(
                         )
                         Text(
                             text = state.currentMusic?.artist ?: "",
-                            color = MusikColorTheme.colorScheme.onSecondary,
+                            color = textColor,
                             fontSize = 12.sp,
                             maxLines = 1,
                             textAlign = TextAlign.Start,
@@ -384,7 +471,7 @@ fun PlayerSwipeableScreen(
                         )
                     }
                     MinimisedPlayButtonsComposable(
-                        playerViewDraggableState = swipeableState,
+                        playerScreenSwipeableState = swipeableState,
                         playbackController = playbackController,
                         isPlaying = state.isPlaying
                     )

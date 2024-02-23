@@ -9,7 +9,7 @@ import android.os.Build
 import android.util.Log
 import com.github.enteraname74.domain.model.Music
 import com.github.enteraname74.event.PlayerScreenEvent
-import com.github.enteraname74.viewmodel.PlayerScreenViewModelImpl
+import com.github.enteraname74.viewmodel.PlayerScreenViewModel
 
 /**
  * Implementation of the PlaybackController.
@@ -17,11 +17,7 @@ import com.github.enteraname74.viewmodel.PlayerScreenViewModelImpl
  */
 class PlaybackControllerImpl(
     private val context: Context,
-): PlaybackController {
-    override var initialList: ArrayList<Music> = ArrayList()
-    override var playedList: ArrayList<Music> = ArrayList()
-    override var currentMusic: Music? = null
-
+): PlaybackController() {
     private var shouldLaunchService: Boolean = true
     private var shouldInit: Boolean = true
 
@@ -30,12 +26,12 @@ class PlaybackControllerImpl(
         playbackController = this
     )
 
-    private val player: RemoteMusikPlayer = RemoteMusikPlayer(
+    override val player: RemoteMusikPlayer = RemoteMusikPlayer(
         context = context,
         playbackController =  this
     )
 
-    var playerViewModel: PlayerScreenViewModelImpl? = null
+    override var playerViewModel: PlayerScreenViewModel? = null
 
     private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -81,52 +77,6 @@ class PlaybackControllerImpl(
         shouldInit = false
     }
 
-    /**
-     * Retrieve the index of the current played music.
-     * Return -1 if the current music is null or if it is not found in the current playlist
-     */
-    private fun getIndexOfCurrentMusic(): Int {
-        return if (currentMusic == null) {
-            -1
-        } else {
-            playedList.indexOf(playedList.find { it.id == currentMusic!!.id })
-        }
-    }
-
-    /**
-     * Retrieve the next music in the current playlist.
-     * Return null if nothing is found.
-     * Return the first music if we are at the end of the playlist.
-     */
-    private fun getNextMusic(currentIndex: Int): Music? {
-        return if (playedList.isNotEmpty()) playedList[(currentIndex + 1) % playedList.size] else null
-    }
-
-    /**
-     * Retrieve the previous music in the current playlist.
-     * Return null if nothing is found.
-     * Return the last music if we are at the start of the playlist.
-     */
-    private fun getPreviousMusic(currentIndex: Int): Music? {
-        return if (playedList.isNotEmpty()) {
-            if (currentIndex == 0) {
-                playedList.last()
-            } else {
-                playedList[currentIndex - 1]
-            }
-        } else {
-            null
-        }
-    }
-
-    override val isPlaying: Boolean
-        get() = player.isPlaying()
-
-    override fun setPlayerLists(musics: List<Music>) {
-        initialList = ArrayList(musics)
-        playedList = ArrayList(musics)
-    }
-
     override fun setAndPlayMusic(music: Music) {
         Log.d("CONTROLLER", "SET AND PLAY MUSIC")
         if (shouldInit) init()
@@ -138,62 +88,16 @@ class PlaybackControllerImpl(
             shouldLaunchService = false
         }
 
-        currentMusic = music
+        _currentMusic = music
         player.setMusic(music)
         player.launchMusic()
         update()
     }
 
-    override fun togglePlayPause() {
-        player.togglePlayPause()
-        update()
-    }
-
-    override fun play() {
-        player.play()
-        update()
-    }
-
-    override fun pause() {
-        player.pause()
-        update()
-    }
-
-    override fun next() {
-        val currentIndex = getIndexOfCurrentMusic()
-        val nextMusic = getNextMusic(currentIndex)
-
-        nextMusic?.let {
-            player.pause()
-            setAndPlayMusic(it)
-        }
-
-    }
-
-    override fun previous() {
-        val currentIndex = getIndexOfCurrentMusic()
-        val previousMusic = getPreviousMusic(currentIndex)
-
-        previousMusic?.let {
-            player.pause()
-            setAndPlayMusic(it)
-        }
-    }
-
-    override fun seekToPosition(position: Int) {
-        player.seekToPosition(position)
-        update()
-    }
-
-    override fun getMusicDuration(): Int {
-        return if (currentMusic == null) 0 else player.getMusicDuration()
-    }
-
-    override fun getCurrentMusicPosition(): Int = player.getMusicPosition()
-
     override fun stopPlayback() {
         if (shouldInit) return
-        Log.d("PLAYBACK CONTROLLER", "STOP")
+
+        releaseDurationJob()
 
         context.unregisterReceiver(broadcastReceiver)
         player.release()
@@ -203,41 +107,29 @@ class PlaybackControllerImpl(
         context.stopService(serviceIntent)
 
         shouldInit = true
-        playedList = ArrayList()
-        initialList = ArrayList()
+        _playedList = ArrayList()
+        _initialList = ArrayList()
     }
 
     override fun update() {
         mediaSessionManager.updateMetadata()
         mediaSessionManager.updateState()
 
+        if (durationJob == null) {
+            launchDurationJob()
+        }
+
         val intentForUpdatingNotification = Intent(PlayerService.SERVICE_BROADCAST)
         intentForUpdatingNotification.putExtra(PlayerService.UPDATE_WITH_PLAYING_STATE, isPlaying)
         context.sendBroadcast(intentForUpdatingNotification)
 
         playerViewModel?.handler?.onEvent(PlayerScreenEvent.UpdatePlayedMusic(
-            music = currentMusic
+            music = _currentMusic,
+            duration = player.getMusicDuration()
         ))
         playerViewModel?.handler?.onEvent(PlayerScreenEvent.UpdateIsPlaying(
             isPlaying = isPlaying
         ))
-    }
-
-    override fun skipAndRemoveCurrentSong() {
-        if (currentMusic == null) return
-
-        val currentIndex = getIndexOfCurrentMusic()
-        val nextMusic = getNextMusic(currentIndex)
-
-        playedList.removeIf{ it.id == currentMusic!!.id }
-        initialList.removeIf { it.id == currentMusic!!.id }
-
-        if (playedList.isEmpty()) stopPlayback()
-        else {
-            nextMusic?.let {
-                setAndPlayMusic(it)
-            }
-        }
     }
 
     companion object {
