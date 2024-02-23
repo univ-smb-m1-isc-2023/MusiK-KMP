@@ -1,11 +1,11 @@
 package com.github.enteraname74.screens
 
-import android.util.Log
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -69,8 +69,6 @@ fun PlayerSwipeableScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val state by playerScreenViewModel.handler.state.collectAsState()
-
-    Log.d("RECOMPOSE", "RECOMPOSE ${state.isPlaying}")
 
     MusikBackHandler(
         enabled = swipeableState.currentValue == PlayerScreenSheetStates.EXPANDED
@@ -138,10 +136,26 @@ fun PlayerSwipeableScreen(
                 )
             )
     ) {
+        val mainBoxClickableModifier =
+            if (swipeableState.currentValue == PlayerScreenSheetStates.MINIMISED) {
+                Modifier.clickable {
+                    coroutineScope.launch {
+                        swipeableState.animateTo(
+                            PlayerScreenSheetStates.EXPANDED,
+                            tween(Constants.AnimationDuration.normal)
+                        )
+                    }
+                }
+            } else {
+                Modifier
+            }
+
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = MusikColorTheme.colorScheme.secondary)
+                .then(mainBoxClickableModifier)
         ) {
             BoxWithConstraints(
                 modifier = Modifier
