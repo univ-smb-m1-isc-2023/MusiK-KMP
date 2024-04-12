@@ -13,7 +13,8 @@ import org.koin.dsl.module
 actual val appModule: Module = module {
     viewModel {
         MainScreenViewModelImpl(
-            musicInformationDataSource = get()
+            musicInformationDataSource = get(),
+            musicFileDataSource = get()
         )
     }
     viewModel {

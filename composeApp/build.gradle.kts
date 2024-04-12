@@ -47,6 +47,8 @@ kotlin {
 
             implementation(libs.kmpalette.core)
             implementation(libs.multiplatform.settings)
+
+            implementation(libs.mp.filepicker)
         }
     }
 }

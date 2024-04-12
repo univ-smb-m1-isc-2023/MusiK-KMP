@@ -1,4 +1,4 @@
-package com.github.enteraname74.remotedatasource.serviceimpl
+package com.github.enteraname74.remotedatasource.datasourceimpl
 
 import com.github.enteraname74.domain.datasource.MusicInformationDataSource
 import com.github.enteraname74.domain.model.Music

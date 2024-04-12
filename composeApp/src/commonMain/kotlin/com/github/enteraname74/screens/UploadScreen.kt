@@ -34,7 +34,6 @@ import androidx.compose.ui.text.font.FontWeight
 import com.github.enteraname74.Constants
 import com.github.enteraname74.composable.StateView
 import com.github.enteraname74.composable.MusicRow
-import com.github.enteraname74.composable.UploadFabComposable
 import com.github.enteraname74.composable.search.SearchMusics
 import com.github.enteraname74.composable.search.SearchView
 import com.github.enteraname74.domain.model.Music
@@ -48,24 +47,20 @@ import com.github.enteraname74.type.SearchScreenSheetStates
 import com.github.enteraname74.viewmodel.MainScreenViewModel
 import kotlinx.coroutines.launch
 
+/*
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MainScreen(
-    viewModel: MainScreenViewModel,
-    playbackController: PlaybackController,
-    playerScreenSwipeableState: SwipeableState<PlayerScreenSheetStates>
+fun UploadScreen(
+    viewModel: UploadScreenViewModel,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val state by viewModel.handler.state.collectAsState()
 
-    val searchScreenSwipeableState = rememberSwipeableState(
-        initialValue = SearchScreenSheetStates.COLLAPSED,
-        animationSpec = tween(Constants.AnimationDuration.normal)
-    )
-
+    /*
     LaunchedEffect(key1 = null) {
         viewModel.handler.onEvent(MainScreenEvent.FetchMusics)
     }
+    */
 
     BoxWithConstraints(
         modifier = Modifier
@@ -109,13 +104,6 @@ fun MainScreen(
                 )
             }
         }
-
-        UploadFabComposable(
-            modifier = Modifier.align(Alignment.TopEnd),
-            playerScreenSwipeableState = playerScreenSwipeableState,
-            uploadFile = { file ->
-                viewModel.handler.onEvent(MainScreenEvent.UploadMusic(file))
-            })
 
         SearchView(
             maxHeight = maxHeight,
@@ -212,3 +200,4 @@ private fun AllMusicsView(
         }
     }
 }
+*/

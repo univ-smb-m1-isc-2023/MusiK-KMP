@@ -4,9 +4,9 @@ package com.github.enteraname74.remotedatasource.utils
  * Routes used to communicate with the server.
  */
 object ServerRoutes {
-    private const val SERVER_IP = "192.168.144.158"
+    private const val SERVER_IP = "192.168.121.158"
     private const val SERVER_PORT = "8080"
-    private const val SERVER_ADDRESS = "http://$SERVER_IP:$SERVER_PORT"
+    private const val SERVER_ADDRESS = "https://$SERVER_IP:$SERVER_PORT"
 
     /**
      * Routes concerning musics information.
@@ -36,6 +36,7 @@ object ServerRoutes {
      */
     object MusicFile {
         private const val MAIN_ROUTE = "$SERVER_ADDRESS/music/file"
+        const val UPLOAD = "$MAIN_ROUTE/upload"
 
         /**
          * Build a route for retrieving a music from its id.

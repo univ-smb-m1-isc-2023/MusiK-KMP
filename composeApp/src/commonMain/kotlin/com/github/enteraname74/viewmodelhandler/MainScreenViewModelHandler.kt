@@ -1,6 +1,8 @@
 package com.github.enteraname74.viewmodelhandler
 
+import com.github.enteraname74.domain.datasource.MusicFileDataSource
 import com.github.enteraname74.domain.datasource.MusicInformationDataSource
+import com.github.enteraname74.domain.model.File
 import com.github.enteraname74.event.MainScreenEvent
 import com.github.enteraname74.state.MainScreenState
 import com.github.enteraname74.strings.appStrings
@@ -16,18 +18,20 @@ import kotlinx.coroutines.launch
  */
 open class MainScreenViewModelHandler(
     private val coroutineScope: CoroutineScope,
-    private val musicInformationDataSource: MusicInformationDataSource
-): ViewModelHandler {
+    private val musicInformationDataSource: MusicInformationDataSource,
+    private val musicFileDataSource: MusicFileDataSource
+) : ViewModelHandler {
     private val _state = MutableStateFlow(MainScreenState())
     val state = _state.asStateFlow()
-    
+
     /**
      * Manage events of the main screen.
      */
     fun onEvent(event: MainScreenEvent) {
         coroutineScope.launch {
-            when(event) {
+            when (event) {
                 MainScreenEvent.FetchMusics -> fetchAllMusics()
+                is MainScreenEvent.UploadMusic -> uploadFile(event.file)
             }
         }
     }
@@ -50,5 +54,9 @@ open class MainScreenViewModelHandler(
                 )
             )
         }
+    }
+
+    protected open suspend fun uploadFile(file: File) {
+        musicFileDataSource.uploadFile(file)
     }
 }

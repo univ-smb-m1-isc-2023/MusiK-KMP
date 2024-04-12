@@ -15,6 +15,7 @@ androidx-media = "1.7.0"
 kmpalette = "2.2.0"
 multiplatform-settings = "1.1.1"
 systemuicontroller = "0.30.1"
+mpfilepicker = "3.1.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
@@ -36,6 +37,8 @@ kmpalette-core = { module = "com.kmpalette:kmpalette-core", version.ref = "kmpal
 multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatform-settings" }
 
 google-accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "systemuicontroller" }
+
+mp-filepicker = { module = "com.darkrockstudios:mpfilepicker", version.ref = "mpfilepicker"}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
