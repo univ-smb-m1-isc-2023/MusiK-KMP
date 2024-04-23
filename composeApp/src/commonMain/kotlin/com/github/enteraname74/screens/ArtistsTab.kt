@@ -6,8 +6,9 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.List
+import androidx.compose.material.icons.rounded.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -19,27 +20,26 @@ import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.enteraname74.Constants
-import com.github.enteraname74.composable.Playlist
 import com.github.enteraname74.composable.StateView
-import com.github.enteraname74.domain.model.Playlist
+import com.github.enteraname74.domain.model.ArtistPreview
 import com.github.enteraname74.strings.appStrings
 import com.github.enteraname74.type.FetchingState
 import com.github.enteraname74.viewmodel.HomeScreenModel
+import com.github.enteraname74.viewmodel.PlayerScreenModel
 import kotlinx.coroutines.launch
 
-
-object PlaylistsTab : Tab {
-    private fun readResolve(): Any = PlaylistsTab
+object ArtistsTab : Tab {
+    private fun readResolve(): Any = ArtistsTab
 
     override val options: TabOptions
         @Composable
         get() {
-            val title = "Playlists Tab"
-            val icon = rememberVectorPainter(Icons.Rounded.List)
+            val title = "Artist Tab"
+            val icon = rememberVectorPainter(Icons.Rounded.Person)
 
             return remember {
                 TabOptions(
-                    index = 1u,
+                    index = 3u,
                     title = title,
                     icon = icon
                 )
@@ -48,21 +48,22 @@ object PlaylistsTab : Tab {
 
     @Composable
     override fun Content() {
-
         val coroutineScope = rememberCoroutineScope()
 
         val screenModel = getScreenModel<HomeScreenModel>()
+
+        val playerScreenModel = getScreenModel<PlayerScreenModel>()
 
         val state by screenModel.state.collectAsState()
 
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            when (state.allPlaylistsState) {
-                is FetchingState.Error -> StateView(message = (state.allPlaylistsState as FetchingState.Error).message)
-                is FetchingState.Loading -> StateView(message = (state.allPlaylistsState as FetchingState.Loading).message)
-                is FetchingState.Success -> AllPlaylistsView(
-                    playlists = (state.allPlaylistsState as FetchingState.Success<List<Playlist>>).data,
+            when (state.allArtistsState) {
+                is FetchingState.Error -> StateView(message = (state.allArtistsState as FetchingState.Error).message)
+                is FetchingState.Loading -> StateView(message = (state.allArtistsState as FetchingState.Loading).message)
+                is FetchingState.Success -> AllArtistsView(
+                    artists = (state.allArtistsState as FetchingState.Success<List<ArtistPreview>>).data,
                     onClick = {
                         coroutineScope.launch {
                             // TODO
@@ -75,12 +76,12 @@ object PlaylistsTab : Tab {
 }
 
 @Composable
-private fun AllPlaylistsView(
-    playlists: List<Playlist>,
-    onClick: (Playlist) -> Unit
+private fun AllArtistsView(
+    artists: List<ArtistPreview>,
+    onClick: (ArtistPreview) -> Unit
 ) {
 
-    if (playlists.isEmpty()) {
+    if (artists.isEmpty()) {
         StateView(
             message = appStrings.noPlaylistsFound
         )
@@ -89,14 +90,8 @@ private fun AllPlaylistsView(
             contentPadding = PaddingValues(Constants.Spacing.large),
             verticalArrangement = Arrangement.spacedBy(Constants.Spacing.large)
         ) {
-            items(playlists, key = {
-                it.id
-            }) { playlist ->
-                Playlist(
-                    name = playlist.title,
-                    musicCount = playlist.musics.size
-                    //onClick = { onClick(playlist) }
-                )
+            items(artists) { artist ->
+                Text(artist.name)
             }
         }
     }

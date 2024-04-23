@@ -20,7 +20,7 @@ actual val appModule: Module = module {
     single {
         HomeScreenModel(
             musicInformationDataSource = get(),
-            musicFileDataSource = get()
+            musicFileDataSource = get(),
         )
     }
     single {

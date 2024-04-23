@@ -9,7 +9,7 @@ object ServerRoutes {
     private const val SERVER_ADDRESS = "http://$SERVER_IP:$SERVER_PORT"
 
     /**
-     * Routes concerning musics information.
+     * Routes concerning music information.
      */
     object MusicInformation {
         private const val MAIN_ROUTE = "$SERVER_ADDRESS/music/information"
@@ -32,7 +32,7 @@ object ServerRoutes {
     }
 
     /**
-     * Routes concerning musics information.
+     * Routes concerning music file.
      */
     object MusicFile {
         private const val MAIN_ROUTE = "$SERVER_ADDRESS/music/file"
@@ -60,5 +60,23 @@ object ServerRoutes {
     object Auth {
         private const val MAIN_ROUTE = "$SERVER_ADDRESS/auth"
         const val auth = MAIN_ROUTE
+    }
+
+    object Playlist {
+        private const val MAIN_ROUTE = "$SERVER_ADDRESS/playlist"
+
+        const val ALL = "${Playlist.MAIN_ROUTE}/all"
+    }
+
+    object Album {
+        private const val MAIN_ROUTE = "$SERVER_ADDRESS/album"
+
+        const val ALL = "${Album.MAIN_ROUTE}/all"
+    }
+
+    object Artist {
+        private const val MAIN_ROUTE = "$SERVER_ADDRESS/artist"
+
+        const val ALL = "${Artist.MAIN_ROUTE}/all"
     }
 }

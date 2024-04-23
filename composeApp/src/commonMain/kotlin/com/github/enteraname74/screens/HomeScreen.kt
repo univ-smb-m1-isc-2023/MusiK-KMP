@@ -76,6 +76,9 @@ class HomeScreen : Screen {
 
         LaunchedEffect(key1 = null) {
             screenModel.onEvent(MainScreenEvent.FetchMusics)
+            screenModel.onEvent(MainScreenEvent.FetchPlaylists)
+            screenModel.onEvent(MainScreenEvent.FetchAlbums)
+            screenModel.onEvent(MainScreenEvent.FetchArtists)
         }
 
         TabNavigator(MusicTab) {
@@ -132,6 +135,8 @@ class HomeScreen : Screen {
                     ) {
                         TabNavigationItem(MusicTab)
                         TabNavigationItem(PlaylistsTab)
+                        TabNavigationItem(AlbumsTab)
+                        TabNavigationItem(ArtistsTab)
                     }
                 }
             )

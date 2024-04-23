@@ -2,8 +2,11 @@ package com.github.enteraname74.viewmodel
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import com.github.enteraname74.domain.datasource.AlbumDataSource
+import com.github.enteraname74.domain.datasource.ArtistDataSource
 import com.github.enteraname74.domain.datasource.MusicFileDataSource
 import com.github.enteraname74.domain.datasource.MusicInformationDataSource
+import com.github.enteraname74.domain.datasource.PlaylistDataSource
 import com.github.enteraname74.domain.model.File
 import com.github.enteraname74.event.MainScreenEvent
 import com.github.enteraname74.state.MainScreenState
@@ -16,7 +19,10 @@ import kotlinx.coroutines.launch
 
 open class HomeScreenModel(
     private val musicInformationDataSource: MusicInformationDataSource,
-    private val musicFileDataSource: MusicFileDataSource
+    private val musicFileDataSource: MusicFileDataSource,
+    private val playlistDataSource: PlaylistDataSource,
+    private val albumDataSource: AlbumDataSource,
+    private val artistDataSource: ArtistDataSource,
 ) : ScreenModel {
     private val _state = MutableStateFlow(MainScreenState())
     val state = _state.asStateFlow()
@@ -29,12 +35,15 @@ open class HomeScreenModel(
             when (event) {
                 MainScreenEvent.FetchMusics -> fetchAllMusics()
                 is MainScreenEvent.UploadMusic -> uploadFile(event.file)
+                is MainScreenEvent.FetchPlaylists -> fetchAllPlaylists()
+                is MainScreenEvent.FetchAlbums -> fetchAllAlbums()
+                is MainScreenEvent.FetchArtists -> fetchAllArtists()
             }
         }
     }
 
     /**
-     * Fetch all musics.
+     * Fetch all music.
      */
     protected open suspend fun fetchAllMusics() {
         _state.update {
@@ -55,6 +64,66 @@ open class HomeScreenModel(
 
     protected open suspend fun uploadFile(file: File) {
         musicFileDataSource.uploadFile(file)
+    }
+
+    /**
+     * Fetch all playlists.
+     */
+    protected open suspend fun fetchAllPlaylists() {
+        _state.update {
+            it.copy(
+                allPlaylistsState = FetchingState.Loading(
+                    message = appStrings.fetchingAllPlaylists
+                )
+            )
+        }
+        _state.update {
+            it.copy(
+                allPlaylistsState = FetchingState.Success(
+                    playlistDataSource.getAll()
+                )
+            )
+        }
+    }
+
+    /**
+     * Fetch all albums.
+     */
+    protected open suspend fun fetchAllAlbums() {
+        _state.update {
+            it.copy(
+                allAlbumsState = FetchingState.Loading(
+                    message = appStrings.fetchingAllAlbums
+                )
+            )
+        }
+        _state.update {
+            it.copy(
+                allAlbumsState = FetchingState.Success(
+                    albumDataSource.getAll()
+                )
+            )
+        }
+    }
+
+    /**
+     * Fetch all artists.
+     */
+    protected open suspend fun fetchAllArtists() {
+        _state.update {
+            it.copy(
+                allArtistsState = FetchingState.Loading(
+                    message = appStrings.fetchingAllArtists
+                )
+            )
+        }
+        _state.update {
+            it.copy(
+                allArtistsState = FetchingState.Success(
+                    artistDataSource.getAll()
+                )
+            )
+        }
     }
 
     // Optional
