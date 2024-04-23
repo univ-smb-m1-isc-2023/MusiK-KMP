@@ -16,6 +16,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.enteraname74.Constants
@@ -48,6 +49,7 @@ object PlaylistsTab : Tab {
 
     @Composable
     override fun Content() {
+        val tabNavigator = LocalTabNavigator.current
 
         val coroutineScope = rememberCoroutineScope()
 
@@ -63,9 +65,11 @@ object PlaylistsTab : Tab {
                 is FetchingState.Loading -> StateView(message = (state.allPlaylistsState as FetchingState.Loading).message)
                 is FetchingState.Success -> AllPlaylistsView(
                     playlists = (state.allPlaylistsState as FetchingState.Success<List<Playlist>>).data,
-                    onClick = {
+                    onClick = { playlist ->
                         coroutineScope.launch {
-                            // TODO
+                            println(playlist.title)
+
+                            tabNavigator.current = PlaylistTab(playlist)
                         }
                     }
                 )
@@ -79,7 +83,6 @@ private fun AllPlaylistsView(
     playlists: List<Playlist>,
     onClick: (Playlist) -> Unit
 ) {
-
     if (playlists.isEmpty()) {
         StateView(
             message = appStrings.noPlaylistsFound
@@ -93,9 +96,8 @@ private fun AllPlaylistsView(
                 it.id
             }) { playlist ->
                 Playlist(
-                    name = playlist.title,
-                    musicCount = playlist.musics.size
-                    //onClick = { onClick(playlist) }
+                    playlist = playlist,
+                    onClick = { onClick(playlist) }
                 )
             }
         }

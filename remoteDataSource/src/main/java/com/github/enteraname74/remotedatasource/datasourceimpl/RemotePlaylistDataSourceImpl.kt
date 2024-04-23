@@ -42,4 +42,21 @@ class RemotePlaylistDataSourceImpl: PlaylistDataSource {
             emptyList()
         }
     }
+
+    override suspend fun get(id: String): Playlist? {
+        return try {
+            val response = client.get(ServerRoutes.MusicFile.get(id)) {
+                header(HttpHeaders.Authorization, Token.value)
+            }
+
+            if (!response.status.isSuccess()) {
+                null
+            } else {
+                val remotePlaylist: RemotePlaylist = response.body()
+                remotePlaylist.toPlaylist()
+            }
+        } catch (_: Exception) {
+            null
+        }
+    }
 }

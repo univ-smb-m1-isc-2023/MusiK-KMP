@@ -1,5 +1,6 @@
 package com.github.enteraname74.composable
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,13 +22,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.enteraname74.Constants
+import com.github.enteraname74.domain.model.Playlist
 import com.github.enteraname74.theme.MusikColorTheme
 
 @Composable
-fun Playlist(name: String, musicCount: Int) {
+fun Playlist(playlist: Playlist, onClick: (Playlist) -> Unit) {
     val myId = "inlineContent"
     val musicCountText = buildAnnotatedString {
-        append(musicCount.toString())
+        append(playlist.musics.size.toString())
 
         appendInlineContent(myId, "[icon]")
     }
@@ -48,14 +50,14 @@ fun Playlist(name: String, musicCount: Int) {
     )
 
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().clickable { onClick(playlist) },
         horizontalArrangement = Arrangement.spacedBy(Constants.Spacing.large),
         verticalAlignment = Alignment.CenterVertically
     ) {
         AppImage(bitmap = null, size = 75.dp)
 
         Column(modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center) {
-            Text(name, color = MusikColorTheme.colorScheme.onPrimary, fontWeight = FontWeight.Bold)
+            Text(playlist.title, color = MusikColorTheme.colorScheme.onPrimary, fontWeight = FontWeight.Bold)
 
             Row {
                 Text(

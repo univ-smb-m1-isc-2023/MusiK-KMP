@@ -102,7 +102,6 @@ object MusicTab : Tab {
                                 )
                                 playbackController.setPlayerLists((state.allMusicsState as FetchingState.Success<List<Music>>).data)
                                 playbackController.setAndPlayMusic(it)
-
                             }
                         }
                     )

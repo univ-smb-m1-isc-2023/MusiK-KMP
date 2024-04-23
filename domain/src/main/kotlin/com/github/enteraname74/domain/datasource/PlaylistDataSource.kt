@@ -8,7 +8,12 @@ import com.github.enteraname74.domain.model.Playlist
 interface PlaylistDataSource {
 
     /**
-     * Retrieve all playlists information.
+     * Retrieves all playlists information.
      */
     suspend fun getAll(): List<Playlist>
+
+    /**
+     * Retrieves a playlist.
+     */
+    suspend fun get(id: String): Playlist?
 }
