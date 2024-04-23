@@ -12,4 +12,9 @@ object EnStrings: ApplicationStrings {
 
     /**** Search screen strings ******/
     override val allMusicsPlaceholder = "Search for a song"
+
+    /**** User screen strings ******/
+    override val username = "Username"
+    override val password = "Password"
+    override val connect = "Connection"
 }

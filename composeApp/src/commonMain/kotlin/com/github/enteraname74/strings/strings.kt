@@ -24,4 +24,9 @@ interface ApplicationStrings {
 
     /**** Search screen strings *****/
     val allMusicsPlaceholder: String
+
+    /**** User screen strings *****/
+    val username: String
+    val password: String
+    val connect: String
 }

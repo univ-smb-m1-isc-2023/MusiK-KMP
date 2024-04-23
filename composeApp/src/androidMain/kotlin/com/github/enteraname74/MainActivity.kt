@@ -15,8 +15,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import cafe.adriel.voyager.navigator.Navigator
 import com.github.enteraname74.model.PlaybackControllerImpl
-import com.github.enteraname74.screens.HomeScreen
+import com.github.enteraname74.screens.UserScreen
 import com.github.enteraname74.theme.ColorThemeManager
+import com.github.enteraname74.ui.theme.MusikTheme
 import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
@@ -28,7 +29,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            Navigator(HomeScreen())
+            MusikTheme {
+                Navigator(UserScreen())
+            }
         }
 
         /*

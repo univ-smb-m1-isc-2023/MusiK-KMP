@@ -12,4 +12,9 @@ object FrStrings: ApplicationStrings {
 
     /**** Search screen strings ******/
     override val allMusicsPlaceholder = "Rechercher une musique"
+
+    /**** User screen strings ******/
+    override val username = "Nom d'utilisateur"
+    override val password = "Mot de passe"
+    override val connect = "Connexion"
 }

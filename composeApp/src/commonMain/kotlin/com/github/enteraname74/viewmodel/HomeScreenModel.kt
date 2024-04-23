@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class HomeScreenModel(
+open class HomeScreenModel(
     private val musicInformationDataSource: MusicInformationDataSource,
     private val musicFileDataSource: MusicFileDataSource
 ) : ScreenModel {
