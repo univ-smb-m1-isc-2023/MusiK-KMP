@@ -63,6 +63,19 @@ open class HomeScreenModel(
     }
 
     protected open suspend fun uploadFile(file: File) {
+        _state.update {
+            it.copy(
+                allAlbumsState = FetchingState.Loading(
+                    message = appStrings.fetchingAllAlbums
+                ),
+                allMusicsState = FetchingState.Loading(
+                    message = appStrings.fetchingAllMusics
+                ),
+                allArtistsState = FetchingState.Loading(
+                    message = appStrings.fetchingAllArtists
+                )
+            )
+        }
         val fileUploaded = musicFileDataSource.uploadFile(file)
         if (fileUploaded) {
             fetchAllMusics()
