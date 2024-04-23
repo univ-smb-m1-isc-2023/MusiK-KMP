@@ -83,7 +83,7 @@ private fun AllAlbumsView(
 
     if (albums.isEmpty()) {
         StateView(
-            message = appStrings.noPlaylistsFound
+            message = appStrings.noAlbumsFound
         )
     } else {
         LazyColumn(

@@ -83,7 +83,7 @@ private fun AllArtistsView(
 
     if (artists.isEmpty()) {
         StateView(
-            message = appStrings.noPlaylistsFound
+            message = appStrings.noArtistsFound
         )
     } else {
         LazyColumn(

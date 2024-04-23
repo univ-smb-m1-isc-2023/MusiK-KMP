@@ -1,6 +1,5 @@
 package com.github.enteraname74.composable
 
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.SwipeableState
@@ -15,14 +14,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.darkrockstudios.libraries.mpfilepicker.MultipleFilePicker
 import com.github.enteraname74.domain.model.File
 import com.github.enteraname74.theme.MusikColorTheme
 import com.github.enteraname74.type.PlayerScreenSheetStates
-import kotlin.math.max
-import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -54,19 +50,11 @@ fun UploadFabComposable(
             }
         }
     }
-
+    println("THERE")
     FloatingActionButton(
         onClick = { showFilePicker = true },
         containerColor = MusikColorTheme.colorScheme.onSecondary,
-        modifier = modifier.padding(
-            bottom = 25.dp,
-            end = 25.dp,
-        ).offset {
-            IntOffset(
-                x = 0,
-                y = max(playerScreenSwipeableState.offset.value.roundToInt() - 200, 0)
-            )
-        }
+        modifier = modifier.padding(bottom = if (playerScreenSwipeableState.currentValue != PlayerScreenSheetStates.COLLAPSED) 65.dp else 0.dp)
     ) {
         Icon(Icons.Rounded.Add, "Upload button.")
     }

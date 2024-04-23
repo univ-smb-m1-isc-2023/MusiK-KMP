@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -47,6 +48,16 @@ class UserScreen : Screen {
         val viewSettingsHandler = injectElement<ViewSettingsHandler>()
 
         if (viewSettingsHandler.user != null) {
+
+            LaunchedEffect(null) {
+                screenModel.onEvent(
+                    UserScreenEvent.AuthenticateUser
+                )
+                navigator.push(
+                    HomeScreen()
+                )
+            }
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -61,12 +72,6 @@ class UserScreen : Screen {
                     color = MusikColorTheme.colorScheme.onPrimary
                 )
             }
-            screenModel.onEvent(
-                UserScreenEvent.AuthenticateUser
-            )
-            navigator.push(
-                HomeScreen()
-            )
         } else {
             Column(
                 modifier = Modifier

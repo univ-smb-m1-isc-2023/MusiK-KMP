@@ -5,9 +5,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.FabPosition
+import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.runtime.Composable
@@ -67,13 +70,24 @@ object MusicTab : Tab {
 
         val state by screenModel.state.collectAsState()
 
-        BoxWithConstraints(
+        Scaffold(
             modifier = Modifier
-                .fillMaxSize()
-                .background(color = MusikColorTheme.colorScheme.primary)
-        ) {
+                .fillMaxSize(),
+            backgroundColor = MusikColorTheme.colorScheme.primary,
+            floatingActionButton = {
+                UploadFabComposable(
+                    playerScreenSwipeableState = playerScreenModel.playerScreenSwipeableState,
+                    uploadFile = { file ->
+                        screenModel.onEvent(MainScreenEvent.UploadMusic(file))
+                    }
+                )
+            },
+            floatingActionButtonPosition = FabPosition.End
+        ) { paddingValues ->
             Column(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
             ) {
                 when (state.allMusicsState) {
                     is FetchingState.Error -> StateView(message = (state.allMusicsState as FetchingState.Error).message)
@@ -94,14 +108,6 @@ object MusicTab : Tab {
                     )
                 }
             }
-
-            UploadFabComposable(
-                modifier = Modifier.align(Alignment.BottomEnd),
-                playerScreenSwipeableState = playerScreenModel.playerScreenSwipeableState,
-                uploadFile = { file ->
-                    screenModel.onEvent(MainScreenEvent.UploadMusic(file))
-                }
-            )
         }
     }
 }

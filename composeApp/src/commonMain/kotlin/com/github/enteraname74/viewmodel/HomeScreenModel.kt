@@ -63,7 +63,12 @@ open class HomeScreenModel(
     }
 
     protected open suspend fun uploadFile(file: File) {
-        musicFileDataSource.uploadFile(file)
+        val fileUploaded = musicFileDataSource.uploadFile(file)
+        if (fileUploaded) {
+            fetchAllMusics()
+            fetchAllAlbums()
+            fetchAllArtists()
+        }
     }
 
     /**

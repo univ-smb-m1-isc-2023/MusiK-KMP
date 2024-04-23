@@ -131,7 +131,7 @@ class HomeScreen : Screen {
                 },
                 bottomBar = {
                     BottomNavigation(
-                        contentColor = MusikColorTheme.colorScheme.secondary
+                        backgroundColor = MusikColorTheme.colorScheme.secondary
                     ) {
                         TabNavigationItem(MusicTab)
                         TabNavigationItem(PlaylistsTab)
@@ -154,7 +154,11 @@ private fun RowScope.TabNavigationItem(tab: Tab) {
     BottomNavigationItem(
         selected = tabNavigator.current == tab,
         onClick = { tabNavigator.current = tab },
-        icon = { Icon(painter = icon, contentDescription = icon.toString()) }
+        icon = { Icon(
+            painter = icon,
+            contentDescription = icon.toString(),
+            tint = MusikColorTheme.colorScheme.onSecondary
+        ) }
     )
 }
 

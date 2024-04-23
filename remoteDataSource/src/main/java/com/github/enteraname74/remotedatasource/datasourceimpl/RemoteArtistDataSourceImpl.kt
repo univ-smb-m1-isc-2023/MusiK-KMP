@@ -5,11 +5,14 @@ import com.github.enteraname74.domain.model.ArtistPreview
 import com.github.enteraname74.remotedatasource.model.RemoteArtistPreview
 import com.github.enteraname74.remotedatasource.model.toArtistPreview
 import com.github.enteraname74.remotedatasource.utils.ServerRoutes
+import com.github.enteraname74.remotedatasource.utils.Token
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
+import io.ktor.client.request.header
+import io.ktor.http.HttpHeaders
 import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 
@@ -25,7 +28,9 @@ class RemoteArtistDataSourceImpl : ArtistDataSource {
 
     override suspend fun getAll(): List<ArtistPreview> {
         return try {
-            val response = client.get(ServerRoutes.Artist.ALL)
+            val response = client.get(ServerRoutes.Artist.ALL) {
+                header(HttpHeaders.Authorization, Token.value)
+            }
 
             if (!response.status.isSuccess()) {
                 emptyList()

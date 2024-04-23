@@ -21,6 +21,9 @@ actual val appModule: Module = module {
         HomeScreenModel(
             musicInformationDataSource = get(),
             musicFileDataSource = get(),
+            playlistDataSource = get(),
+            albumDataSource = get(),
+            artistDataSource = get()
         )
     }
     single {

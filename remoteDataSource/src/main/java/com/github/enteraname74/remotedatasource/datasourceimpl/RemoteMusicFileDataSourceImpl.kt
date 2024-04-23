@@ -12,8 +12,10 @@ import io.ktor.client.request.forms.formData
 import io.ktor.client.request.forms.submitFormWithBinaryData
 import io.ktor.client.request.header
 import io.ktor.client.request.headers
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
+import io.ktor.http.isSuccess
 import io.ktor.http.quote
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.utils.io.streams.asInput
@@ -28,11 +30,11 @@ class RemoteMusicFileDataSourceImpl : MusicFileDataSource {
         }
     }
 
-    override suspend fun uploadFile(file: File) {
+    override suspend fun uploadFile(file: File): Boolean {
         println("File name:" + file.name)
 
-        try {
-            client.submitFormWithBinaryData(
+        return try {
+            val response = client.submitFormWithBinaryData(
                 url = ServerRoutes.MusicFile.UPLOAD,
                 formData = formData {
                     append(
@@ -50,11 +52,15 @@ class RemoteMusicFileDataSourceImpl : MusicFileDataSource {
             ) {
                 header(HttpHeaders.Authorization, Token.value)
             }
+            println("Response from sending file: ${response.status}")
+            println("Response from sending file: ${response.bodyAsText()}")
+            response.status.isSuccess()
         } catch (e: Exception) {
             println("Error: $e")
             e.stackTrace.forEach {
                 println(it.toString())
             }
+            false
         }
     }
 }
