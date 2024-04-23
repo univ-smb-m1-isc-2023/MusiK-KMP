@@ -7,7 +7,8 @@ import com.github.enteraname74.domain.model.File
 import java.io.FileNotFoundException
 
 @SuppressLint("Recycle")
-actual fun getFile(context: Context, path: String): File {
+actual fun getFile(context: Context, path: String, name: String): File {
+    println("path: $path")
 
     val assetDescriptor = context.contentResolver.openAssetFileDescriptor(path.toUri(), "r")
     val length = assetDescriptor?.length ?: throw FileNotFoundException()
@@ -18,7 +19,7 @@ actual fun getFile(context: Context, path: String): File {
     val contentType = context.contentResolver.getType(path.toUri()) ?: throw FileNotFoundException()
 
     return File(
-        name = "test",
+        name = name,
         length = length,
         inputStream = inputStream,
         contentType = contentType

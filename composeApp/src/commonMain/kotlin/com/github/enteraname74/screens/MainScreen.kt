@@ -32,8 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import com.github.enteraname74.Constants
-import com.github.enteraname74.composable.StateView
 import com.github.enteraname74.composable.MusicRow
+import com.github.enteraname74.composable.StateView
 import com.github.enteraname74.composable.UploadFabComposable
 import com.github.enteraname74.composable.search.SearchMusics
 import com.github.enteraname74.composable.search.SearchView
@@ -52,7 +52,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainScreen(
     viewModel: MainScreenViewModel,
-    playbackController: PlaybackController,
+    playbackController: PlaybackController, // Mettre dans un view (screen) model player
     playerScreenSwipeableState: SwipeableState<PlayerScreenSheetStates>
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -91,6 +91,7 @@ fun MainScreen(
                     }
                 }
             )
+
             when (state.allMusicsState) {
                 is FetchingState.Error -> StateView(message = (state.allMusicsState as FetchingState.Error).message)
                 is FetchingState.Loading -> StateView(message = (state.allMusicsState as FetchingState.Loading).message)
@@ -117,6 +118,7 @@ fun MainScreen(
                 viewModel.handler.onEvent(MainScreenEvent.UploadMusic(file))
             })
 
+        /*
         SearchView(
             maxHeight = maxHeight,
             searchScreenSwipeableState = searchScreenSwipeableState,
@@ -133,9 +135,8 @@ fun MainScreen(
                 focusManager = focusManager
             )
         }
+        */
     }
-
-
 }
 
 /**

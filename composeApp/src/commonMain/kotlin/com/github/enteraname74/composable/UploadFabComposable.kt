@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.darkrockstudios.libraries.mpfilepicker.MultipleFilePicker
 import com.github.enteraname74.domain.model.File
+import com.github.enteraname74.theme.MusikColorTheme
 import com.github.enteraname74.type.PlayerScreenSheetStates
 import kotlin.math.max
 import kotlin.math.roundToInt
@@ -40,30 +41,25 @@ fun UploadFabComposable(
 
         selection?.let { files ->
             files.forEach { file ->
-                //val f = File(file.path)
-
-
                 try {
-                    val file = getFile(context, file.platformFile.toString())
+                    val f = getFile(
+                        context,
+                        file.platformFile.toString(),
+                        file.path.substringAfterLast('/')
+                    )
 
-                    uploadFile(file)
+                    uploadFile(f)
                 } catch (_: Exception) {
-
                 }
-
-
-                /*
-                if (p.first != null && p.second != null) {
-                    val pa = Pair(p.first, p.second)
-                    uploadFile(pa)
-                }
-                */
             }
         }
     }
+
     FloatingActionButton(
         onClick = { showFilePicker = true },
+        containerColor = MusikColorTheme.colorScheme.onSecondary,
         modifier = modifier.padding(
+            bottom = 25.dp,
             end = 25.dp,
         ).offset {
             IntOffset(
@@ -72,6 +68,6 @@ fun UploadFabComposable(
             )
         }
     ) {
-        Icon(Icons.Rounded.Add, "Floating action button.")
+        Icon(Icons.Rounded.Add, "Upload button.")
     }
 }

@@ -23,6 +23,8 @@ class RemoteMusicFileDataSourceImpl : MusicFileDataSource {
     }
 
     override suspend fun uploadFile(file: File) {
+        println("File name:" + file.name)
+
         try {
             client.submitFormWithBinaryData(
                 url = ServerRoutes.MusicFile.UPLOAD,
