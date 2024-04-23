@@ -32,7 +32,8 @@ actual val appModule: Module = module {
     single {
         UserScreenModel(
             userDataSource = get(),
-            viewSettingsHandler = get()
+            viewSettingsHandler = get(),
+            authDataSource = get()
         )
     }
     single {

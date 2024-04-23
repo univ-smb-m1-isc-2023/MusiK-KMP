@@ -12,7 +12,8 @@ data class RemoteMusic(
     val name: String,
     val artist: String,
     val album: String,
-    val albumArtworkUrl: String = ""
+    val albumArtworkUrl: String = "",
+    val playlistIds: List<String> = emptyList()
 )
 
 /**
@@ -23,7 +24,8 @@ fun RemoteMusic.toMusic(): Music = Music(
     name = name,
     artist = artist,
     album = album,
-    albumArtworkUrl = albumArtworkUrl
+    albumArtworkUrl = albumArtworkUrl,
+    playlistIds = playlistIds
 )
 
 /**
@@ -34,5 +36,6 @@ fun Music.toRemoteMusic(): RemoteMusic = RemoteMusic(
     name = name,
     artist = artist,
     album = album,
-    albumArtworkUrl = albumArtworkUrl
+    albumArtworkUrl = albumArtworkUrl,
+    playlistIds = playlistIds
 )

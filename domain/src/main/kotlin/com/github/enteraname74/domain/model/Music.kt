@@ -8,5 +8,6 @@ data class Music(
     val name: String,
     val artist: String,
     val album: String,
-    val albumArtworkUrl: String = ""
+    val albumArtworkUrl: String = "",
+    val playlistIds: List<String> = emptyList()
 )

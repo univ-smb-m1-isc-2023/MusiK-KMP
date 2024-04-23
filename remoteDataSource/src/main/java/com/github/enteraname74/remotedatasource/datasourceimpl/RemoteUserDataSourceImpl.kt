@@ -14,6 +14,9 @@ import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 
+/**
+ * Implementation of the UserDataSource for remote data access.
+ */
 class RemoteUserDataSourceImpl : UserDataSource {
     private val client = HttpClient(CIO) {
         install(ContentNegotiation) {
@@ -28,11 +31,8 @@ class RemoteUserDataSourceImpl : UserDataSource {
                 contentType(ContentType.Application.Json)
                 setBody(user)
             }
-            println("Result: ${response.status}")
-            println("Result: ${response.bodyAsText()}")
             response.status.isSuccess()
         } catch (e: Exception) {
-            println("Exception: $e")
             false
         }
     }

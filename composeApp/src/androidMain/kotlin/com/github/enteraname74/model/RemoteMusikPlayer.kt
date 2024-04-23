@@ -3,13 +3,15 @@ package com.github.enteraname74.model
 import android.content.Context
 import android.media.AudioManager
 import android.media.MediaPlayer
+import android.net.Uri
 import android.util.Log
 import com.github.enteraname74.domain.model.Music
 import com.github.enteraname74.remotedatasource.utils.ServerRoutes
+import com.github.enteraname74.remotedatasource.utils.Token
 import kotlinx.coroutines.runBlocking
 
 class RemoteMusikPlayer(
-    context: Context,
+    private val context: Context,
     private val playbackController: PlaybackController
 ) : MusikPlayer,
     MediaPlayer.OnCompletionListener,
@@ -38,7 +40,8 @@ class RemoteMusikPlayer(
             player.apply {
                 stop()
                 reset()
-                setDataSource(ServerRoutes.MusicFile.get(music.id))
+                val uri = Uri.parse(ServerRoutes.MusicFile.get(music.id))
+                setDataSource(context, uri, mapOf("Authorization" to Token.value))
             }
         }
     }

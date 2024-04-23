@@ -53,4 +53,12 @@ object ServerRoutes {
         private const val MAIN_ROUTE = "$SERVER_ADDRESS/user"
         const val connect = MAIN_ROUTE
     }
+
+    /**
+     * Routes concerning authentication.
+     */
+    object Auth {
+        private const val MAIN_ROUTE = "$SERVER_ADDRESS/auth"
+        const val auth = MAIN_ROUTE
+    }
 }

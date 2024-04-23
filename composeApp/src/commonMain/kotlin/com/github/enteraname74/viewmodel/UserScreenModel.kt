@@ -1,6 +1,7 @@
 package com.github.enteraname74.viewmodel
 
 import cafe.adriel.voyager.core.model.ScreenModel
+import com.github.enteraname74.domain.datasource.AuthDataSource
 import com.github.enteraname74.domain.datasource.UserDataSource
 import com.github.enteraname74.event.UserScreenEvent
 import com.github.enteraname74.model.settings.ViewSettingsHandler
@@ -11,9 +12,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class UserScreenModel(
     private val userDataSource: UserDataSource,
+    private val authDataSource: AuthDataSource,
     private val viewSettingsHandler: ViewSettingsHandler
 ): ScreenModel {
     private val _state = MutableStateFlow(UserScreenState())
@@ -24,6 +27,22 @@ class UserScreenModel(
             is UserScreenEvent.SetPassword -> setPassword(password = event.password)
             is UserScreenEvent.SetUsername -> setUsername(username = event.username)
             UserScreenEvent.ConnectUser -> connectUser()
+            UserScreenEvent.AuthenticateUser -> authenticateUser()
+        }
+    }
+
+    /**
+     * Authenticate an user.
+     */
+    private fun authenticateUser() {
+        println("THERE : ${viewSettingsHandler.user}")
+        viewSettingsHandler.user?.let { validUser ->
+            runBlocking {
+                println("Auth")
+                authDataSource.authenticate(validUser)
+                println("End auth")
+
+            }
         }
     }
 

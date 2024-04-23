@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.TextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -46,99 +47,116 @@ class UserScreen : Screen {
         val viewSettingsHandler = koinInject<ViewSettingsHandler>()
 
         if (viewSettingsHandler.user != null) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        color = MusikColorTheme.colorScheme.primary
+                    )
+                    .padding(Constants.Spacing.medium),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                CircularProgressIndicator(
+                    color = MusikColorTheme.colorScheme.onPrimary
+                )
+            }
+            screenModel.onEvent(
+                UserScreenEvent.AuthenticateUser
+            )
             navigator.push(
                 HomeScreen()
             )
-        }
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    color = MusikColorTheme.colorScheme.primary
-                )
-                .padding(Constants.Spacing.medium),
-            verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = appStrings.appName,
-                color = MusikColorTheme.colorScheme.onPrimary,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
-            )
+        } else {
             Column(
-                verticalArrangement = Arrangement.spacedBy(Constants.Spacing.large),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        color = MusikColorTheme.colorScheme.primary
+                    )
+                    .padding(Constants.Spacing.medium),
+                verticalArrangement = Arrangement.SpaceBetween,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                TextField(
-                    value = state.username,
-                    onValueChange = {
-                        screenModel.onEvent(
-                            UserScreenEvent.SetUsername(it)
-                        )
-                    },
-                    label = {
-                        Text(
-                            text = appStrings.username
-                        )
-                    },
-                    colors = TextFieldDefaults.colors(
-                        unfocusedTextColor = MusikColorTheme.colorScheme.onPrimary,
-                        focusedTextColor = MusikColorTheme.colorScheme.onPrimary,
-                        unfocusedLabelColor = MusikColorTheme.colorScheme.onPrimary,
-                        focusedLabelColor = MusikColorTheme.colorScheme.onPrimary,
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        cursorColor = MusikColorTheme.colorScheme.secondary,
-                        unfocusedIndicatorColor = MusikColorTheme.colorScheme.secondary,
-                        focusedIndicatorColor = MusikColorTheme.colorScheme.secondary,
-                    )
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = appStrings.appName,
+                    color = MusikColorTheme.colorScheme.onPrimary,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
                 )
-                TextField(
-                    value = state.password,
-                    onValueChange = {
-                        screenModel.onEvent(
-                            UserScreenEvent.SetPassword(it)
-                        )
-                    },
-                    label = {
-                        Text(
-                            text = appStrings.password
-                        )
-                    },
-                    colors = TextFieldDefaults.colors(
-                        unfocusedTextColor = MusikColorTheme.colorScheme.onPrimary,
-                        focusedTextColor = MusikColorTheme.colorScheme.onPrimary,
-                        unfocusedLabelColor = MusikColorTheme.colorScheme.onPrimary,
-                        focusedLabelColor = MusikColorTheme.colorScheme.onPrimary,
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        cursorColor = MusikColorTheme.colorScheme.secondary,
-                        unfocusedIndicatorColor = MusikColorTheme.colorScheme.secondary,
-                        focusedIndicatorColor = MusikColorTheme.colorScheme.secondary,
-                    )
-                )
-                Button(
-                    onClick = {
-                        screenModel.onEvent(
-                            UserScreenEvent.ConnectUser
-                        )
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MusikColorTheme.colorScheme.secondary
-                    ),
-                    enabled = state.username.isNotBlank() && state.password.isNotBlank()
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(Constants.Spacing.large),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
-                        text = appStrings.connect,
-                        color = MusikColorTheme.colorScheme.onPrimary
+                    TextField(
+                        value = state.username,
+                        onValueChange = {
+                            screenModel.onEvent(
+                                UserScreenEvent.SetUsername(it)
+                            )
+                        },
+                        label = {
+                            Text(
+                                text = appStrings.username
+                            )
+                        },
+                        colors = TextFieldDefaults.colors(
+                            unfocusedTextColor = MusikColorTheme.colorScheme.onPrimary,
+                            focusedTextColor = MusikColorTheme.colorScheme.onPrimary,
+                            unfocusedLabelColor = MusikColorTheme.colorScheme.onPrimary,
+                            focusedLabelColor = MusikColorTheme.colorScheme.onPrimary,
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            cursorColor = MusikColorTheme.colorScheme.secondary,
+                            unfocusedIndicatorColor = MusikColorTheme.colorScheme.secondary,
+                            focusedIndicatorColor = MusikColorTheme.colorScheme.secondary,
+                        )
                     )
+                    TextField(
+                        value = state.password,
+                        onValueChange = {
+                            screenModel.onEvent(
+                                UserScreenEvent.SetPassword(it)
+                            )
+                        },
+                        label = {
+                            Text(
+                                text = appStrings.password
+                            )
+                        },
+                        colors = TextFieldDefaults.colors(
+                            unfocusedTextColor = MusikColorTheme.colorScheme.onPrimary,
+                            focusedTextColor = MusikColorTheme.colorScheme.onPrimary,
+                            unfocusedLabelColor = MusikColorTheme.colorScheme.onPrimary,
+                            focusedLabelColor = MusikColorTheme.colorScheme.onPrimary,
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            cursorColor = MusikColorTheme.colorScheme.secondary,
+                            unfocusedIndicatorColor = MusikColorTheme.colorScheme.secondary,
+                            focusedIndicatorColor = MusikColorTheme.colorScheme.secondary,
+                        )
+                    )
+                    Button(
+                        onClick = {
+                            screenModel.onEvent(
+                                UserScreenEvent.ConnectUser
+                            )
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MusikColorTheme.colorScheme.secondary
+                        ),
+                        enabled = state.username.isNotBlank() && state.password.isNotBlank()
+                    ) {
+                        Text(
+                            text = appStrings.connect,
+                            color = MusikColorTheme.colorScheme.onPrimary
+                        )
+                    }
                 }
+                Spacer(modifier = Modifier.fillMaxWidth())
             }
-            Spacer(modifier = Modifier.fillMaxWidth())
         }
     }
 }
