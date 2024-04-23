@@ -10,8 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.TextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -27,12 +27,12 @@ import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.github.enteraname74.Constants
+import com.github.enteraname74.di.injectElement
 import com.github.enteraname74.event.UserScreenEvent
 import com.github.enteraname74.model.settings.ViewSettingsHandler
 import com.github.enteraname74.strings.appStrings
 import com.github.enteraname74.theme.MusikColorTheme
 import com.github.enteraname74.viewmodel.UserScreenModel
-import org.koin.compose.koinInject
 
 /**
  * View of the user screen.
@@ -44,7 +44,7 @@ class UserScreen : Screen {
         val navigator = LocalNavigator.currentOrThrow
 
         val state by screenModel.state.collectAsState()
-        val viewSettingsHandler = koinInject<ViewSettingsHandler>()
+        val viewSettingsHandler = injectElement<ViewSettingsHandler>()
 
         if (viewSettingsHandler.user != null) {
             Column(

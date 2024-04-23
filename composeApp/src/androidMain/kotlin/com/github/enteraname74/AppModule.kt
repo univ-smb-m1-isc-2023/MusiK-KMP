@@ -1,15 +1,14 @@
 package com.github.enteraname74
 
 import android.content.Context
-import com.github.enteraname74.model.settings.MusikSettings
-import com.github.enteraname74.model.settings.MusikSettingsImpl
 import com.github.enteraname74.model.PlaybackController
 import com.github.enteraname74.model.PlaybackControllerImpl
+import com.github.enteraname74.model.settings.MusikSettings
+import com.github.enteraname74.model.settings.MusikSettingsImpl
 import com.github.enteraname74.model.settings.ViewSettingsHandler
 import com.github.enteraname74.theme.ColorThemeManager
 import com.github.enteraname74.viewmodel.HomeScreenModel
 import com.github.enteraname74.viewmodel.PlayerScreenModel
-import com.github.enteraname74.viewmodel.PlayerScreenViewModelImpl
 import com.github.enteraname74.viewmodel.UserScreenModel
 import com.russhwolf.settings.SharedPreferencesSettings
 import org.koin.android.ext.koin.androidApplication
@@ -25,9 +24,7 @@ actual val appModule: Module = module {
         )
     }
     single {
-        PlayerScreenModel(
-            playbackController = get()
-        )
+        PlayerScreenModel()
     }
     single {
         UserScreenModel(
@@ -35,9 +32,6 @@ actual val appModule: Module = module {
             viewSettingsHandler = get(),
             authDataSource = get()
         )
-    }
-    single {
-        PlayerScreenViewModelImpl()
     }
     single<ColorThemeManager> {
         ColorThemeManager()

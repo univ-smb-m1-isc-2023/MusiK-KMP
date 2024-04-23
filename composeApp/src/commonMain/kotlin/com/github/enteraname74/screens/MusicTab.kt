@@ -25,8 +25,10 @@ import com.github.enteraname74.Constants
 import com.github.enteraname74.composable.MusicRow
 import com.github.enteraname74.composable.StateView
 import com.github.enteraname74.composable.UploadFabComposable
+import com.github.enteraname74.di.injectElement
 import com.github.enteraname74.domain.model.Music
 import com.github.enteraname74.event.MainScreenEvent
+import com.github.enteraname74.model.PlaybackController
 import com.github.enteraname74.strings.appStrings
 import com.github.enteraname74.theme.MusikColorTheme
 import com.github.enteraname74.type.FetchingState
@@ -61,6 +63,7 @@ object MusicTab : Tab {
         val screenModel = getScreenModel<HomeScreenModel>()
 
         val playerScreenModel = getScreenModel<PlayerScreenModel>()
+        val playbackController = injectElement<PlaybackController>()
 
         val state by screenModel.state.collectAsState()
 
@@ -79,12 +82,13 @@ object MusicTab : Tab {
                         musics = (state.allMusicsState as FetchingState.Success<List<Music>>).data,
                         onClick = {
                             coroutineScope.launch {
-                                playerScreenModel.playbackController.setPlayerLists((state.allMusicsState as FetchingState.Success<List<Music>>).data)
-                                playerScreenModel.playbackController.setAndPlayMusic(it)
                                 playerScreenModel.playerScreenSwipeableState.animateTo(
                                     targetValue = PlayerScreenSheetStates.EXPANDED,
                                     anim = tween(Constants.AnimationDuration.normal)
                                 )
+                                playbackController.setPlayerLists((state.allMusicsState as FetchingState.Success<List<Music>>).data)
+                                playbackController.setAndPlayMusic(it)
+
                             }
                         }
                     )

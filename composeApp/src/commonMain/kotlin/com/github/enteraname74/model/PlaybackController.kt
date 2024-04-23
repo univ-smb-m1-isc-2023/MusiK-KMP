@@ -1,6 +1,7 @@
 package com.github.enteraname74.model
 
 import com.github.enteraname74.domain.model.Music
+import com.github.enteraname74.viewmodel.PlayerScreenModel
 
 
 /**
@@ -28,6 +29,8 @@ interface PlaybackController{
      * If the player is not defined yet, it will return false.
      */
     val isPlaying: Boolean
+
+    var playerViewModel: PlayerScreenModel?
 
     /**
      * Set the lists used by the player (played and initial list).

@@ -41,8 +41,11 @@ import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.github.enteraname74.Constants
 import com.github.enteraname74.composable.search.SearchMusics
 import com.github.enteraname74.composable.search.SearchView
+import com.github.enteraname74.di.injectElement
 import com.github.enteraname74.domain.model.Music
 import com.github.enteraname74.event.MainScreenEvent
+import com.github.enteraname74.model.PlaybackController
+import com.github.enteraname74.model.PlaybackControllerImpl
 import com.github.enteraname74.strings.appStrings
 import com.github.enteraname74.theme.MusikColorTheme
 import com.github.enteraname74.type.FetchingState
@@ -60,6 +63,9 @@ class HomeScreen : Screen {
         val screenModel = getScreenModel<HomeScreenModel>()
 
         val playerScreenModel = getScreenModel<PlayerScreenModel>()
+        val playbackController = injectElement<PlaybackController>()
+
+        playbackController.playerViewModel = playerScreenModel
 
         val state by screenModel.state.collectAsState()
 
@@ -110,10 +116,14 @@ class HomeScreen : Screen {
                                 musics = if (state.allMusicsState is FetchingState.Success<List<Music>>) {
                                     (state.allMusicsState as FetchingState.Success<List<Music>>).data
                                 } else emptyList(),
-                                playbackController = playerScreenModel.playbackController,
                                 focusManager = focusManager
                             )
                         }
+
+                        PlayerSwipeableScreen(
+                            maxHeight = maxHeight,
+                            playerScreenModel = playerScreenModel
+                        )
                     }
                 },
                 bottomBar = {

@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.SwipeableState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.swipeable
@@ -49,11 +48,12 @@ import com.github.enteraname74.composable.AppImage
 import com.github.enteraname74.composable.MusikBackHandler
 import com.github.enteraname74.composable.playbuttons.ExpandedPlayButtonsComposable
 import com.github.enteraname74.composable.playbuttons.MinimisedPlayButtonsComposable
+import com.github.enteraname74.di.injectElement
 import com.github.enteraname74.model.PlaybackController
 import com.github.enteraname74.theme.MusikColorTheme
 import com.github.enteraname74.type.PlayerScreenSheetStates
 import com.github.enteraname74.type.ScreenOrientation
-import com.github.enteraname74.viewmodel.PlayerScreenViewModel
+import com.github.enteraname74.viewmodel.PlayerScreenModel
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.max
@@ -63,12 +63,12 @@ import kotlin.math.roundToInt
 @Composable
 fun PlayerSwipeableScreen(
     maxHeight: Float,
-    swipeableState: SwipeableState<PlayerScreenSheetStates>,
-    playerScreenViewModel: PlayerScreenViewModel,
-    playbackController: PlaybackController
+    playerScreenModel: PlayerScreenModel,
+    playbackController: PlaybackController = injectElement()
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val state by playerScreenViewModel.handler.state.collectAsState()
+    val state by playerScreenModel.state.collectAsState()
+    val swipeableState = playerScreenModel.playerScreenSwipeableState
 
     Log.d("RECOMPOSE", "RECOMPOSE ${state.isPlaying}")
 
