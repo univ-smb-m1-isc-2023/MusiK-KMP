@@ -3,20 +3,21 @@ agp = "8.2.1"
 android-compileSdk = "34"
 android-minSdk = "26"
 android-targetSdk = "34"
-androidx-activityCompose = "1.8.2"
-compose = "1.6.1"
-compose-plugin = "1.5.12"
+androidx-activityCompose = "1.9.0"
+compose = "1.6.6"
+compose-plugin = "1.6.0"
 kotlin = "1.9.22"
 org-jetbrains-kotlin-jvm = "1.9.22"
 koin = "3.5.3"
 koin-compose = "1.1.2"
-ktor = "2.3.8"
+ktor = "2.3.9"
 androidx-media = "1.7.0"
 kmpalette = "2.2.0"
 multiplatform-settings = "1.1.1"
 systemuicontroller = "0.30.1"
 mpfilepicker = "3.1.0"
 voyager = "1.0.0"
+kamel = "0.9.4"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
@@ -49,6 +50,9 @@ voyager-tabNavigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", v
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
 voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
 voyager-kodein = { module = "cafe.adriel.voyager:voyager-kodein", version.ref = "voyager" }
+
+# Kamel
+kamel-image = { module = "media.kamel:kamel-image", version.ref = "kamel" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

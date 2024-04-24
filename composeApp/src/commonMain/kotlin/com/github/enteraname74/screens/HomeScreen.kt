@@ -45,7 +45,6 @@ import com.github.enteraname74.di.injectElement
 import com.github.enteraname74.domain.model.Music
 import com.github.enteraname74.event.MainScreenEvent
 import com.github.enteraname74.model.PlaybackController
-import com.github.enteraname74.model.PlaybackControllerImpl
 import com.github.enteraname74.strings.appStrings
 import com.github.enteraname74.theme.MusikColorTheme
 import com.github.enteraname74.type.FetchingState
@@ -154,11 +153,13 @@ private fun RowScope.TabNavigationItem(tab: Tab) {
     BottomNavigationItem(
         selected = tabNavigator.current == tab,
         onClick = { tabNavigator.current = tab },
-        icon = { Icon(
-            painter = icon,
-            contentDescription = icon.toString(),
-            tint = MusikColorTheme.colorScheme.onSecondary
-        ) }
+        icon = {
+            Icon(
+                painter = icon,
+                contentDescription = icon.toString(),
+                tint = MusikColorTheme.colorScheme.onSecondary
+            )
+        }
     )
 }
 

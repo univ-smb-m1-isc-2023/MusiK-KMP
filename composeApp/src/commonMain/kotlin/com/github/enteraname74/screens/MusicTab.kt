@@ -1,13 +1,9 @@
 package com.github.enteraname74.screens
 
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FabPosition
 import androidx.compose.material.Scaffold
@@ -18,21 +14,19 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.enteraname74.Constants
-import com.github.enteraname74.composable.MusicRow
+import com.github.enteraname74.composable.AllMusicView
 import com.github.enteraname74.composable.StateView
 import com.github.enteraname74.composable.UploadFabComposable
 import com.github.enteraname74.di.injectElement
 import com.github.enteraname74.domain.model.Music
 import com.github.enteraname74.event.MainScreenEvent
 import com.github.enteraname74.model.PlaybackController
-import com.github.enteraname74.strings.appStrings
 import com.github.enteraname74.theme.MusikColorTheme
 import com.github.enteraname74.type.FetchingState
 import com.github.enteraname74.type.PlayerScreenSheetStates
@@ -92,8 +86,8 @@ object MusicTab : Tab {
                 when (state.allMusicsState) {
                     is FetchingState.Error -> StateView(message = (state.allMusicsState as FetchingState.Error).message)
                     is FetchingState.Loading -> StateView(message = (state.allMusicsState as FetchingState.Loading).message)
-                    is FetchingState.Success -> AllMusicsView(
-                        musics = (state.allMusicsState as FetchingState.Success<List<Music>>).data,
+                    is FetchingState.Success -> AllMusicView(
+                        music = (state.allMusicsState as FetchingState.Success<List<Music>>).data,
                         onClick = {
                             coroutineScope.launch {
                                 playerScreenModel.playerScreenSwipeableState.animateTo(
@@ -106,32 +100,6 @@ object MusicTab : Tab {
                         }
                     )
                 }
-            }
-        }
-    }
-}
-
-@Composable
-private fun AllMusicsView(
-    musics: List<Music>,
-    onClick: (Music) -> Unit
-) {
-
-    if (musics.isEmpty()) {
-        StateView(
-            message = appStrings.noMusicsFound
-        )
-    } else {
-        LazyColumn {
-            items(musics, key = {
-                it.id
-            }) { music ->
-                MusicRow(
-                    music = music,
-                    onClick = {
-                        onClick(it)
-                    }
-                )
             }
         }
     }

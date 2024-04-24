@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.icons.Icons
@@ -24,6 +25,9 @@ import androidx.compose.ui.unit.sp
 import com.github.enteraname74.Constants
 import com.github.enteraname74.domain.model.Playlist
 import com.github.enteraname74.theme.MusikColorTheme
+import io.kamel.image.KamelImage
+import io.kamel.image.asyncPainterResource
+
 
 @Composable
 fun Playlist(playlist: Playlist, onClick: (Playlist) -> Unit) {
@@ -54,10 +58,22 @@ fun Playlist(playlist: Playlist, onClick: (Playlist) -> Unit) {
         horizontalArrangement = Arrangement.spacedBy(Constants.Spacing.large),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        AppImage(bitmap = null, size = 75.dp)
+        if (playlist.musics.isNotEmpty() && playlist.musics[0].albumArtworkUrl.isNotEmpty()) {
+            KamelImage(
+                modifier = Modifier.size(75.dp),
+                resource = asyncPainterResource(data = playlist.musics[0].albumArtworkUrl),
+                contentDescription = null
+            )
+        } else {
+            AppImage(bitmap = null, size = 75.dp)
+        }
 
         Column(modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center) {
-            Text(playlist.title, color = MusikColorTheme.colorScheme.onPrimary, fontWeight = FontWeight.Bold)
+            Text(
+                playlist.title,
+                color = MusikColorTheme.colorScheme.onPrimary,
+                fontWeight = FontWeight.Bold
+            )
 
             Row {
                 Text(

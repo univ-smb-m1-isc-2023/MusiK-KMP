@@ -65,6 +65,8 @@ import com.github.enteraname74.type.FetchingState
 import com.github.enteraname74.type.PlayerScreenSheetStates
 import com.github.enteraname74.type.ScreenOrientation
 import com.github.enteraname74.viewmodel.PlayerScreenModel
+import io.kamel.image.KamelImage
+import io.kamel.image.asyncPainterResource
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.max
@@ -232,12 +234,21 @@ fun PlayerSwipeableScreen(
                             end = imagePaddingStart
                         )
                 ) {
-                    AppImage(
-                        bitmap = null,
-                        size = imageSize,
-                        roundedPercent = (swipeableState.offset.value / 100).roundToInt()
-                            .coerceIn(3, 10)
-                    )
+                    val url = state.currentMusic?.albumArtworkUrl ?: ""
+                    if (url.isNotEmpty()) {
+                        KamelImage(
+                            modifier = Modifier.size(imageSize),
+                            resource = asyncPainterResource(data = url),
+                            contentDescription = null
+                        )
+                    } else {
+                        AppImage(
+                            bitmap = null,
+                            size = imageSize,
+                            roundedPercent = (swipeableState.offset.value / 100).roundToInt()
+                                .coerceIn(3, 10)
+                        )
+                    }
                 }
 
                 Column(

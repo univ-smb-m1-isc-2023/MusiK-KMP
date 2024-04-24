@@ -52,6 +52,9 @@ kotlin {
 
             // Voyager:
             implementation(libs.bundles.voyager)
+
+            // Kamel:
+            implementation(libs.kamel.image)
         }
     }
 }
