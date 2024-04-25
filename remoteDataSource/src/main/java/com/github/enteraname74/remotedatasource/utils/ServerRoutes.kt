@@ -31,6 +31,17 @@ object ServerRoutes {
         fun delete(id: String) = "$MAIN_ROUTE/$id"
     }
 
+    object Lyrics {
+        private const val MAIN_ROUTE = "$SERVER_ADDRESS/lyrics"
+
+        /**
+         * Build a route for retrieving the lyrics of a song.
+         *
+         * @param id the id of the song.
+         */
+        fun get(id: String) = "${MAIN_ROUTE}/$id"
+    }
+
     /**
      * Routes concerning music file.
      */

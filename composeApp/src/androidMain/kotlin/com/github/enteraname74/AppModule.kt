@@ -27,7 +27,9 @@ actual val appModule: Module = module {
         )
     }
     single {
-        PlayerScreenModel()
+        PlayerScreenModel(
+            lyricsDataSource = get()
+        )
     }
     single {
         UserScreenModel(

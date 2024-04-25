@@ -16,4 +16,9 @@ sealed interface PlayerScreenEvent {
      * Used for showing is a music is being played.
      */
     data class UpdateIsPlaying(val isPlaying: Boolean): PlayerScreenEvent
+
+    /**
+     * Used to fetch the lyrics of the current music.
+     */
+    data object FetchLyrics: PlayerScreenEvent
 }

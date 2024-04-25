@@ -15,6 +15,8 @@ object FrStrings : ApplicationStrings {
     override val noAlbumsFound = "Aucun album n'a été trouvé !"
     override val fetchingAllArtists = "Récupération de tous les artistes..."
     override val noArtistsFound = "Aucun artiste n'a été trouvé !"
+    override val fetchingLyrics = "Récupération des paroles..."
+    override val noLyricsFound = "Aucune parole trouvée!"
 
     /**** Search screen strings ******/
     override val allMusicsPlaceholder = "Rechercher une musique"
@@ -23,4 +25,8 @@ object FrStrings : ApplicationStrings {
     override val username = "Nom d'utilisateur"
     override val password = "Mot de passe"
     override val connect = "Connexion"
+
+    /**** Player screen ****/
+    override val lyrics = "Paroles"
+    override val close = "Fermer"
 }

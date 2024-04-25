@@ -3,6 +3,7 @@ package com.github.enteraname74.remotedatasource
 import com.github.enteraname74.domain.datasource.AlbumDataSource
 import com.github.enteraname74.domain.datasource.ArtistDataSource
 import com.github.enteraname74.domain.datasource.AuthDataSource
+import com.github.enteraname74.domain.datasource.LyricsDataSource
 import com.github.enteraname74.domain.datasource.MusicFileDataSource
 import com.github.enteraname74.domain.datasource.MusicInformationDataSource
 import com.github.enteraname74.domain.datasource.PlaylistDataSource
@@ -11,6 +12,7 @@ import com.github.enteraname74.remotedatasource.datasourceimpl.RemoteAuthDataSou
 import com.github.enteraname74.remotedatasource.datasourceimpl.RemoteUserDataSourceImpl
 import com.github.enteraname74.remotedatasource.datasourceimpl.RemoteAlbumDataSourceImpl
 import com.github.enteraname74.remotedatasource.datasourceimpl.RemoteArtistDataSourceImpl
+import com.github.enteraname74.remotedatasource.datasourceimpl.RemoteLyricsDataSourceImpl
 import com.github.enteraname74.remotedatasource.datasourceimpl.RemoteMusicFileDataSourceImpl
 import com.github.enteraname74.remotedatasource.datasourceimpl.RemoteMusicInformationDataSourceImpl
 import com.github.enteraname74.remotedatasource.datasourceimpl.RemotePlaylistDataSourceImpl
@@ -28,4 +30,5 @@ val remoteDataSourceModule: Module = module {
     single<PlaylistDataSource> { RemotePlaylistDataSourceImpl() }
     single<AlbumDataSource> { RemoteAlbumDataSourceImpl() }
     single<ArtistDataSource> { RemoteArtistDataSourceImpl() }
+    single<LyricsDataSource> { RemoteLyricsDataSourceImpl() }
 }

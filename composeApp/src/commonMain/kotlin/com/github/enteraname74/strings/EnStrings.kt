@@ -15,6 +15,8 @@ object EnStrings : ApplicationStrings {
     override val noAlbumsFound = "No albums found!"
     override val fetchingAllArtists = "Fetching all artists..."
     override val noArtistsFound = "No artist found!"
+    override val fetchingLyrics = "Fetching lyrics..."
+    override val noLyricsFound = "No lyrics found!"
 
 
     /**** Search screen strings ******/
@@ -24,4 +26,8 @@ object EnStrings : ApplicationStrings {
     override val username = "Username"
     override val password = "Password"
     override val connect = "Connection"
+
+    /**** Player screen ****/
+    override val lyrics = "Lyrics"
+    override val close = "Close"
 }

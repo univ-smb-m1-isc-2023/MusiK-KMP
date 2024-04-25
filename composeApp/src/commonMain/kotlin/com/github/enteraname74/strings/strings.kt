@@ -27,6 +27,8 @@ interface ApplicationStrings {
     val noAlbumsFound: String
     val fetchingAllArtists: String
     val noArtistsFound: String
+    val fetchingLyrics: String
+    val noLyricsFound: String
 
 
     /**** Search screen strings *****/
@@ -36,4 +38,8 @@ interface ApplicationStrings {
     val username: String
     val password: String
     val connect: String
+
+    /**** Player screen ****/
+    val lyrics: String
+    val close: String
 }
