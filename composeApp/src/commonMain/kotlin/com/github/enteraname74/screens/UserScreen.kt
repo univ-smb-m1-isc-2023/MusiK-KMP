@@ -53,7 +53,10 @@ class UserScreen : Screen {
                 screenModel.onEvent(
                     UserScreenEvent.AuthenticateUser
                 )
-                navigator.push(
+            }
+
+            if (state.shouldGoToMainScreen) {
+                navigator.replace(
                     HomeScreen()
                 )
             }

@@ -12,18 +12,17 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class UserScreenModel(
     private val userDataSource: UserDataSource,
     private val authDataSource: AuthDataSource,
     private val viewSettingsHandler: ViewSettingsHandler
-): ScreenModel {
+) : ScreenModel {
     private val _state = MutableStateFlow(UserScreenState())
     val state = _state.asStateFlow()
 
     fun onEvent(event: UserScreenEvent) {
-        when(event) {
+        when (event) {
             is UserScreenEvent.SetPassword -> setPassword(password = event.password)
             is UserScreenEvent.SetUsername -> setUsername(username = event.username)
             UserScreenEvent.ConnectUser -> connectUser()
@@ -35,15 +34,16 @@ class UserScreenModel(
      * Authenticate an user.
      */
     private fun authenticateUser() {
-        println("THERE : ${viewSettingsHandler.user}")
-        viewSettingsHandler.user?.let { validUser ->
-            runBlocking {
-                println("Auth")
-                authDataSource.authenticate(validUser)
-                println("End auth")
-
+        CoroutineScope(Dispatchers.IO).launch {
+            viewSettingsHandler.user?.let { validUser ->
+                _state.update {
+                    it.copy(
+                        shouldGoToMainScreen = authDataSource.authenticate(validUser)
+                    )
+                }
             }
         }
+
     }
 
     private fun connectUser() {

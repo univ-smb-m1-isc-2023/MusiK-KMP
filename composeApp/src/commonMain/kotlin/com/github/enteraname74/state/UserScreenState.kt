@@ -5,5 +5,6 @@ package com.github.enteraname74.state
  */
 data class UserScreenState(
     val username: String = "",
-    val password: String = ""
+    val password: String = "",
+    val shouldGoToMainScreen: Boolean = false
 )

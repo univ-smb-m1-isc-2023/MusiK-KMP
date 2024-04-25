@@ -9,5 +9,5 @@ interface AuthDataSource {
     /**
      * Authenticate a user.
      */
-    suspend fun authenticate(user: User)
+    suspend fun authenticate(user: User): Boolean
 }

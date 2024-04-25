@@ -14,6 +14,7 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
+import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 
 /**
@@ -26,8 +27,8 @@ class RemoteAuthDataSourceImpl : AuthDataSource {
         }
     }
 
-    override suspend fun authenticate(user: User) {
-        try {
+    override suspend fun authenticate(user: User): Boolean {
+        return try {
             val response = client.post(ServerRoutes.Auth.auth) {
                 contentType(ContentType.Application.Json)
                 setBody(user.toRemoteUser())
@@ -35,8 +36,9 @@ class RemoteAuthDataSourceImpl : AuthDataSource {
 
             val token = response.body<RemoteToken>()
             Token.value = token.token
-
+            response.status.isSuccess()
         } catch (_: Exception) {
+            false
         }
     }
 }
