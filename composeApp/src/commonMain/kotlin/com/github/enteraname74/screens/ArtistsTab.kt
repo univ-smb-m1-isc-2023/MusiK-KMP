@@ -17,9 +17,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.enteraname74.Constants
+import com.github.enteraname74.composable.PlaylistRow
 import com.github.enteraname74.composable.StateView
 import com.github.enteraname74.domain.model.ArtistPreview
 import com.github.enteraname74.strings.appStrings
@@ -49,10 +51,9 @@ object ArtistsTab : Tab {
     @Composable
     override fun Content() {
         val coroutineScope = rememberCoroutineScope()
+        val tabNavigator = LocalTabNavigator.current
 
         val screenModel = getScreenModel<HomeScreenModel>()
-
-        val playerScreenModel = getScreenModel<PlayerScreenModel>()
 
         val state by screenModel.state.collectAsState()
 
@@ -64,9 +65,14 @@ object ArtistsTab : Tab {
                 is FetchingState.Loading -> StateView(message = (state.allArtistsState as FetchingState.Loading).message)
                 is FetchingState.Success -> AllArtistsView(
                     artists = (state.allArtistsState as FetchingState.Success<List<ArtistPreview>>).data,
-                    onClick = {
+                    onClick = { artist ->
                         coroutineScope.launch {
-                            // TODO
+                            val selectedArtist = screenModel.getArtist(
+                                artistName = artist.name
+                            )
+                            selectedArtist?.let { foundArtist ->
+                                tabNavigator.current = ArtistTab(foundArtist)
+                            }
                         }
                     }
                 )
@@ -91,7 +97,14 @@ private fun AllArtistsView(
             verticalArrangement = Arrangement.spacedBy(Constants.Spacing.large)
         ) {
             items(artists) { artist ->
-                Text(artist.name)
+                PlaylistRow(
+                    title = artist.name,
+                    total = artist.totalSongs,
+                    artworkUrl = artist.artworkUrl,
+                    onClick = {
+                        onClick(artist)
+                    }
+                )
             }
         }
     }

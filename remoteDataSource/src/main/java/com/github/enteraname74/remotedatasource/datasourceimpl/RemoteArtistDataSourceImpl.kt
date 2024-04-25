@@ -1,8 +1,11 @@
 package com.github.enteraname74.remotedatasource.datasourceimpl
 
 import com.github.enteraname74.domain.datasource.ArtistDataSource
+import com.github.enteraname74.domain.model.Artist
 import com.github.enteraname74.domain.model.ArtistPreview
+import com.github.enteraname74.remotedatasource.model.RemoteArtist
 import com.github.enteraname74.remotedatasource.model.RemoteArtistPreview
+import com.github.enteraname74.remotedatasource.model.toArtist
 import com.github.enteraname74.remotedatasource.model.toArtistPreview
 import com.github.enteraname74.remotedatasource.utils.ServerRoutes
 import com.github.enteraname74.remotedatasource.utils.Token
@@ -40,6 +43,22 @@ class RemoteArtistDataSourceImpl : ArtistDataSource {
             }
         } catch (_: Exception) {
             emptyList()
+        }
+    }
+
+    override suspend fun getByName(name: String): Artist? {
+        return try {
+            val response = client.get(ServerRoutes.Artist.get(name).replace(" ", "%20")) {
+                header(HttpHeaders.Authorization, Token.value)
+            }
+
+            if (response.status.isSuccess()) {
+                response.body<RemoteArtist>().toArtist()
+            } else {
+                null
+            }
+        } catch (_: Exception) {
+            null
         }
     }
 }

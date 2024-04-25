@@ -27,7 +27,7 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.enteraname74.Constants
 import com.github.enteraname74.composable.CreatePlaylistDialogComposable
 import com.github.enteraname74.composable.CreatePlaylistFabComposable
-import com.github.enteraname74.composable.Playlist
+import com.github.enteraname74.composable.PlaylistRow
 import com.github.enteraname74.composable.StateView
 import com.github.enteraname74.domain.model.Playlist
 import com.github.enteraname74.event.MainScreenEvent
@@ -137,8 +137,9 @@ object PlaylistsTab : Tab {
                 items(playlists, key = {
                     it.id
                 }) { playlist ->
-                    Playlist(
-                        playlist = playlist,
+                    PlaylistRow(
+                        title = playlist.title,
+                        musics = playlist.musics,
                         onClick = { onClick(playlist) }
                     )
                 }

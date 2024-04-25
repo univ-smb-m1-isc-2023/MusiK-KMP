@@ -7,6 +7,8 @@ import com.github.enteraname74.domain.datasource.ArtistDataSource
 import com.github.enteraname74.domain.datasource.MusicFileDataSource
 import com.github.enteraname74.domain.datasource.MusicInformationDataSource
 import com.github.enteraname74.domain.datasource.PlaylistDataSource
+import com.github.enteraname74.domain.model.Album
+import com.github.enteraname74.domain.model.Artist
 import com.github.enteraname74.domain.model.File
 import com.github.enteraname74.event.MainScreenEvent
 import com.github.enteraname74.state.MainScreenState
@@ -83,6 +85,15 @@ open class HomeScreenModel(
             fetchAllAlbums()
             fetchAllArtists()
         }
+    }
+
+
+    suspend fun getAlbum(albumName: String, artistName: String): Album? {
+        return albumDataSource.getByNameAndArtist(albumName, artistName)
+    }
+
+    suspend fun getArtist(artistName: String): Artist? {
+        return artistDataSource.getByName(artistName)
     }
 
     /**

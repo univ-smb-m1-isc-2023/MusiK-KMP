@@ -8,16 +8,16 @@ import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.enteraname74.composable.PlaylistView
-import com.github.enteraname74.domain.model.Playlist
+import com.github.enteraname74.domain.model.Artist
 import com.github.enteraname74.viewmodel.PlayerScreenModel
 
-class PlaylistTab(
-    private val playlist: Playlist
+class ArtistTab(
+    private val artist: Artist
 ) : Tab {
     override val options: TabOptions
         @Composable
         get() {
-            val title = "Playlist Tab"
+            val title = "Album Tab"
 
             return remember {
                 TabOptions(
@@ -35,10 +35,10 @@ class PlaylistTab(
         val navigator = LocalTabNavigator.current
 
         PlaylistView(
-            title = playlist.title,
-            musics = playlist.musics,
+            title = artist.name,
+            musics = artist.musics,
             playerSwipeableState = playerScreenModel.playerScreenSwipeableState,
-            onBack = { navigator.current = PlaylistsTab }
+            onBack = { navigator.current = ArtistsTab }
         )
     }
 }

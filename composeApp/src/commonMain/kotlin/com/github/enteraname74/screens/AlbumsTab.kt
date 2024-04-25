@@ -17,15 +17,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.github.enteraname74.Constants
+import com.github.enteraname74.composable.PlaylistRow
 import com.github.enteraname74.composable.StateView
 import com.github.enteraname74.domain.model.AlbumPreview
 import com.github.enteraname74.strings.appStrings
 import com.github.enteraname74.type.FetchingState
 import com.github.enteraname74.viewmodel.HomeScreenModel
-import com.github.enteraname74.viewmodel.PlayerScreenModel
 import kotlinx.coroutines.launch
 
 object AlbumsTab : Tab {
@@ -49,10 +50,9 @@ object AlbumsTab : Tab {
     @Composable
     override fun Content() {
         val coroutineScope = rememberCoroutineScope()
+        val tabNavigator = LocalTabNavigator.current
 
         val screenModel = getScreenModel<HomeScreenModel>()
-
-        val playerScreenModel = getScreenModel<PlayerScreenModel>()
 
         val state by screenModel.state.collectAsState()
 
@@ -64,9 +64,16 @@ object AlbumsTab : Tab {
                 is FetchingState.Loading -> StateView(message = (state.allAlbumsState as FetchingState.Loading).message)
                 is FetchingState.Success -> AllAlbumsView(
                     albums = (state.allAlbumsState as FetchingState.Success<List<AlbumPreview>>).data,
-                    onClick = {
+                    onClick = { album ->
                         coroutineScope.launch {
-                            // TODO
+                            val selectedAlbum = screenModel.getAlbum(
+                                albumName = album.albumName,
+                                artistName = album.artistName
+                            )
+                            println("Selected album: $selectedAlbum")
+                            selectedAlbum?.let { foundAlbum ->
+                                tabNavigator.current = AlbumTab(foundAlbum)
+                            }
                         }
                     }
                 )
@@ -91,7 +98,14 @@ private fun AllAlbumsView(
             verticalArrangement = Arrangement.spacedBy(Constants.Spacing.large)
         ) {
             items(albums) { album ->
-                Text(album.albumName)
+                PlaylistRow(
+                    title = album.albumName,
+                    total = album.totalSongs,
+                    artworkUrl = album.artworkUrl,
+                    onClick = {
+                        onClick(album)
+                    }
+                )
             }
         }
     }
