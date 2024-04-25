@@ -19,4 +19,6 @@ sealed interface MainScreenEvent {
     data object FetchArtists : MainScreenEvent
 
     data class UploadMusic(val file: File) : MainScreenEvent
+
+    data class CreatePlaylist(val name: String) : MainScreenEvent
 }

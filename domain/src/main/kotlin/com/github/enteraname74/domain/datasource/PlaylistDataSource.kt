@@ -16,4 +16,9 @@ interface PlaylistDataSource {
      * Retrieves a playlist.
      */
     suspend fun get(id: String): Playlist?
+
+    /**
+     * Creates a playlist.
+     */
+    suspend fun create(name: String): Playlist?
 }

@@ -42,4 +42,9 @@ interface ApplicationStrings {
     /**** Player screen ****/
     val lyrics: String
     val close: String
+
+    /**** Playlists strings *****/
+    val createPlaylist: String
+    val playlistName: String
+    val create: String
 }

@@ -38,6 +38,7 @@ open class HomeScreenModel(
                 is MainScreenEvent.FetchPlaylists -> fetchAllPlaylists()
                 is MainScreenEvent.FetchAlbums -> fetchAllAlbums()
                 is MainScreenEvent.FetchArtists -> fetchAllArtists()
+                is MainScreenEvent.CreatePlaylist -> createPlaylist(event.name)
             }
         }
     }
@@ -139,6 +140,21 @@ open class HomeScreenModel(
             it.copy(
                 allArtistsState = FetchingState.Success(
                     artistDataSource.getAll()
+                )
+            )
+        }
+    }
+
+    /**
+     * Creates a playlist.
+     */
+    protected open suspend fun createPlaylist(name: String) {
+        playlistDataSource.create(name)
+
+        _state.update {
+            it.copy(
+                allPlaylistsState = FetchingState.Success(
+                    playlistDataSource.getAll()
                 )
             )
         }

@@ -18,7 +18,6 @@ object EnStrings : ApplicationStrings {
     override val fetchingLyrics = "Fetching lyrics..."
     override val noLyricsFound = "No lyrics found!"
 
-
     /**** Search screen strings ******/
     override val allMusicsPlaceholder = "Search for a song"
 
@@ -30,4 +29,9 @@ object EnStrings : ApplicationStrings {
     /**** Player screen ****/
     override val lyrics = "Lyrics"
     override val close = "Close"
+
+    /**** Playlists strings *****/
+    override val createPlaylist = "Create a playlist"
+    override val playlistName = "Playlist name"
+    override val create = "Create"
 }

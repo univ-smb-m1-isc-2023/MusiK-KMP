@@ -29,4 +29,9 @@ object FrStrings : ApplicationStrings {
     /**** Player screen ****/
     override val lyrics = "Paroles"
     override val close = "Fermer"
+
+    /**** Playlists strings *****/
+    override val createPlaylist = "Créer une liste de lecture"
+    override val playlistName = "Nom de la liste de lecture"
+    override val create = "Créer"
 }
