@@ -76,14 +76,20 @@ object ServerRoutes {
     object Playlist {
         const val MAIN_ROUTE = "$SERVER_ADDRESS/playlist"
 
-        const val ALL = "${MAIN_ROUTE}/all"
+        const val ALL = "$MAIN_ROUTE/all"
 
         /**
          * Builds a route for retrieving a playlist from its id.
          *
          * @param id the id of the playlist to retrieve.
          */
-        fun get(id: String) = "${MAIN_ROUTE}/$id"
+        fun get(id: String) = "$MAIN_ROUTE/$id"
+
+        fun addMusic(playlistId: String, musicId: String) =
+            "$MAIN_ROUTE/add/$playlistId/$musicId"
+
+        fun removeMusic(playlistId: String, musicId: String) =
+            "$MAIN_ROUTE/remove/$playlistId/$musicId"
     }
 
     object Album {

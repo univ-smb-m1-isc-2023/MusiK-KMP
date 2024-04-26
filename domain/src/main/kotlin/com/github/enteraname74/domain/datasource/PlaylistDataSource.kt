@@ -21,4 +21,14 @@ interface PlaylistDataSource {
      * Creates a playlist.
      */
     suspend fun create(name: String): Playlist?
+
+    /**
+     * Adds a music to a playlist.
+     */
+    suspend fun addMusic(playlistId: String, musicId: String)
+
+    /**
+     * Removes a music from a playlist.
+     */
+    suspend fun removeMusic(playlistId: String, musicId: String)
 }

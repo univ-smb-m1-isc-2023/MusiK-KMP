@@ -1,6 +1,7 @@
 package com.github.enteraname74.composable
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,15 +23,17 @@ import io.kamel.image.asyncPainterResource
 /**
  * Represent a row with information about of a Music.
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MusicRow(
     music: Music,
-    onClick: (Music) -> Unit
+    onClick: (Music) -> Unit,
+    onLongClick: (Music) -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick(music) },
+            .combinedClickable(onClick = { onClick(music) }, onLongClick = { onLongClick(music) }),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {

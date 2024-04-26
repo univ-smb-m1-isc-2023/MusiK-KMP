@@ -95,7 +95,6 @@ object PlaylistsTab : Tab {
                     CreatePlaylistDialogComposable(onDismissRequest = {
                         openDialog.value = false
                     }, onConfirm = { playlistName ->
-                        // TODO: Request playlist creation.
                         screenModel.onEvent(MainScreenEvent.CreatePlaylist(playlistName))
 
                         openDialog.value = false

@@ -4,7 +4,6 @@ import com.github.enteraname74.domain.datasource.PlaylistDataSource
 import com.github.enteraname74.domain.model.Playlist
 import com.github.enteraname74.remotedatasource.model.RemotePlaylist
 import com.github.enteraname74.remotedatasource.model.toPlaylist
-import com.github.enteraname74.remotedatasource.model.toRemoteUser
 import com.github.enteraname74.remotedatasource.utils.ServerRoutes
 import com.github.enteraname74.remotedatasource.utils.Token
 import io.ktor.client.HttpClient
@@ -26,7 +25,7 @@ import kotlinx.serialization.json.put
 /**
  * Implementation of the PlaylistService for remote data access.
  */
-class RemotePlaylistDataSourceImpl: PlaylistDataSource {
+class RemotePlaylistDataSourceImpl : PlaylistDataSource {
     private val client = HttpClient(CIO) {
         install(ContentNegotiation) {
             json()
@@ -83,6 +82,24 @@ class RemotePlaylistDataSourceImpl: PlaylistDataSource {
             }
         } catch (_: Exception) {
             null
+        }
+    }
+
+    override suspend fun addMusic(playlistId: String, musicId: String) {
+        try {
+            client.get(ServerRoutes.Playlist.addMusic(playlistId, musicId)) {
+                header(HttpHeaders.Authorization, Token.value)
+            }
+        } catch (_: Exception) {
+        }
+    }
+
+    override suspend fun removeMusic(playlistId: String, musicId: String) {
+        try {
+            client.get(ServerRoutes.Playlist.removeMusic(playlistId, musicId)) {
+                header(HttpHeaders.Authorization, Token.value)
+            }
+        } catch (_: Exception) {
         }
     }
 }

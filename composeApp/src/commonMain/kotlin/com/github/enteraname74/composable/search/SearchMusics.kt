@@ -51,7 +51,8 @@ fun SearchMusics(
                             playbackController.setPlayerLists(foundedMusics)
                             playbackController.setAndPlayMusic(selectedMusic)
                         }
-                    }
+                    },
+                    onLongClick = {}
                 )
             }
         }

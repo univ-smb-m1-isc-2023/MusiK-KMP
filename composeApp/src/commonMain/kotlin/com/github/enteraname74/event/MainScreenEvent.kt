@@ -21,4 +21,9 @@ sealed interface MainScreenEvent {
     data class UploadMusic(val file: File) : MainScreenEvent
 
     data class CreatePlaylist(val name: String) : MainScreenEvent
+
+    data class AddMusicToPlaylist(val playlistId: String, val musicId: String) : MainScreenEvent
+
+    data class RemoveMusicFromPlaylist(val playlistId: String, val musicId: String) :
+        MainScreenEvent
 }

@@ -6,35 +6,29 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import com.github.enteraname74.Constants
-import com.github.enteraname74.domain.model.Music
+import com.github.enteraname74.domain.model.Playlist
 import com.github.enteraname74.strings.appStrings
 
 @Composable
-fun AllMusicView(
-    music: List<Music>,
-    onClick: (Music) -> Unit,
-    onLongClick: (Music) -> Unit
+fun AllPlaylistsView(
+    playlists: List<Playlist>,
+    onClick: (Playlist) -> Unit
 ) {
-    if (music.isEmpty()) {
+    if (playlists.isEmpty()) {
         StateView(
-            message = appStrings.noMusicsFound
+            message = appStrings.noPlaylistsFound
         )
     } else {
         LazyColumn(
             contentPadding = PaddingValues(Constants.Spacing.large),
             verticalArrangement = Arrangement.spacedBy(Constants.Spacing.large)
         ) {
-            items(music, key = {
+            items(playlists, key = {
                 it.id
-            }) { m ->
-                MusicRow(
-                    music = m,
-                    onClick = {
-                        onClick(it)
-                    },
-                    onLongClick = {
-                        onLongClick(it)
-                    }
+            }) { playlist ->
+                Playlist(
+                    playlist = playlist,
+                    onClick = { onClick(playlist) }
                 )
             }
         }

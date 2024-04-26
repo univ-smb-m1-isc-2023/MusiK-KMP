@@ -41,6 +41,16 @@ open class HomeScreenModel(
                 is MainScreenEvent.FetchAlbums -> fetchAllAlbums()
                 is MainScreenEvent.FetchArtists -> fetchAllArtists()
                 is MainScreenEvent.CreatePlaylist -> createPlaylist(event.name)
+                is MainScreenEvent.AddMusicToPlaylist -> addMusicToPlaylist(
+                    event.playlistId,
+                    event.musicId
+                )
+
+                is MainScreenEvent.RemoveMusicFromPlaylist -> removeMusicFromPlaylist(
+                    event.playlistId,
+                    event.musicId
+                )
+
             }
         }
     }
@@ -170,6 +180,41 @@ open class HomeScreenModel(
             )
         }
     }
+
+    /**
+     * Adds a music to a playlist.
+     */
+    protected open suspend fun addMusicToPlaylist(playlistId: String, musicId: String) {
+        playlistDataSource.addMusic(playlistId, musicId)
+
+        _state.update {
+            it.copy(
+                allPlaylistsState = FetchingState.Success(
+                    playlistDataSource.getAll()
+                )
+            )
+        }
+
+        fetchAllPlaylists()
+    }
+
+    /**
+     * Removes a music from a playlist.
+     */
+    protected open suspend fun removeMusicFromPlaylist(playlistId: String, musicId: String) {
+        playlistDataSource.removeMusic(playlistId, musicId)
+
+        _state.update {
+            it.copy(
+                allPlaylistsState = FetchingState.Success(
+                    playlistDataSource.getAll()
+                )
+            )
+        }
+
+        fetchAllPlaylists()
+    }
+
 
     // Optional
     override fun onDispose() {
