@@ -11,11 +11,11 @@ import com.github.enteraname74.strings.appStrings
 
 @Composable
 fun AllMusicView(
-    music: List<Music>,
+    musics: List<Music>,
     onClick: (Music) -> Unit,
     onLongClick: (Music) -> Unit
 ) {
-    if (music.isEmpty()) {
+    if (musics.isEmpty()) {
         StateView(
             message = appStrings.noMusicsFound
         )
@@ -24,7 +24,7 @@ fun AllMusicView(
             contentPadding = PaddingValues(Constants.Spacing.large),
             verticalArrangement = Arrangement.spacedBy(Constants.Spacing.large)
         ) {
-            items(music, key = {
+            items(musics, key = {
                 it.id
             }) { m ->
                 MusicRow(

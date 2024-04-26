@@ -6,6 +6,7 @@ import com.github.enteraname74.remotedatasource.utils.ServerRoutes
 import com.github.enteraname74.remotedatasource.utils.Token
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.forms.InputProvider
 import io.ktor.client.request.forms.formData
@@ -27,6 +28,9 @@ class RemoteMusicFileDataSourceImpl : MusicFileDataSource {
     private val client = HttpClient(CIO) {
         install(ContentNegotiation) {
             json()
+        }
+        install(HttpTimeout) {
+            requestTimeoutMillis = 20000
         }
     }
 

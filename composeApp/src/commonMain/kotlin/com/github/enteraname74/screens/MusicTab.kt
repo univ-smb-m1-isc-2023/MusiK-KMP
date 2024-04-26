@@ -93,6 +93,7 @@ object MusicTab : Tab {
         ) { paddingValues ->
             if (openModal.value) {
                 ModalBottomSheet(
+                    containerColor = MusikColorTheme.colorScheme.secondary,
                     sheetState = bottomModalSheetState,
                     onDismissRequest = {
                         musicToAddToPlaylist.value = null
@@ -134,7 +135,7 @@ object MusicTab : Tab {
                     is FetchingState.Error -> StateView(message = (state.allMusicsState as FetchingState.Error).message)
                     is FetchingState.Loading -> StateView(message = (state.allMusicsState as FetchingState.Loading).message)
                     is FetchingState.Success -> AllMusicView(
-                        music = (state.allMusicsState as FetchingState.Success<List<Music>>).data,
+                        musics = (state.allMusicsState as FetchingState.Success<List<Music>>).data,
                         onClick = {
                             coroutineScope.launch {
                                 playerScreenModel.playerScreenSwipeableState.animateTo(

@@ -31,7 +31,7 @@ fun UploadFabComposable(
 
     var showFilePicker by remember { mutableStateOf(false) }
 
-    val fileType = listOf("m4a", "mp4", "mp3", "aac", "wav")
+    val fileType = listOf("m4a", "mp4", "mp3", "aac", "wav", "ogg")
     MultipleFilePicker(show = showFilePicker, fileExtensions = fileType) { selection ->
         showFilePicker = false
 

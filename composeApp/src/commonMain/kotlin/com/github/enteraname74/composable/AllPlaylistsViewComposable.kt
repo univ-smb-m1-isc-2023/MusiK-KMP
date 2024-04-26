@@ -26,8 +26,9 @@ fun AllPlaylistsView(
             items(playlists, key = {
                 it.id
             }) { playlist ->
-                Playlist(
-                    playlist = playlist,
+                PlaylistRow(
+                    title = playlist.title,
+                    musics = playlist.musics,
                     onClick = { onClick(playlist) }
                 )
             }

@@ -46,6 +46,7 @@ fun PlaylistView(
     playerSwipeableState: SwipeableState<PlayerScreenSheetStates>,
     playbackController: PlaybackController = injectElement(),
     onBack: () -> Unit,
+    onLongClick: (Music) -> Unit = {}
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -118,7 +119,7 @@ fun PlaylistView(
         }
 
         AllMusicView(
-            music = musics,
+            musics = musics,
             onClick = {
                 coroutineScope.launch {
                     playerSwipeableState.animateTo(
@@ -128,6 +129,9 @@ fun PlaylistView(
                     playbackController.setPlayerLists(musics)
                     playbackController.setAndPlayMusic(it)
                 }
+            },
+            onLongClick = {
+                onLongClick(it)
             }
         )
     }
