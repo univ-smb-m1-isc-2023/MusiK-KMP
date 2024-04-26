@@ -25,12 +25,17 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.androidx.media)
+
             implementation(libs.koin.androix.compose)
+            implementation(libs.google.accompanist.systemuicontroller)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
+            implementation(compose.material3)
+            implementation(compose.materialIconsExtended)
             implementation(compose.ui)
             @OptIn(ExperimentalComposeLibrary::class)
             implementation(compose.components.resources)
@@ -39,6 +44,17 @@ kotlin {
             implementation(project(":remoteDataSource"))
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
+
+            implementation(libs.kmpalette.core)
+            implementation(libs.multiplatform.settings)
+
+            implementation(libs.mp.filepicker)
+
+            // Voyager:
+            implementation(libs.bundles.voyager)
+
+            // Kamel:
+            implementation(libs.kamel.image)
         }
     }
 }
