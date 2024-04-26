@@ -9,7 +9,7 @@ import android.os.Build
 import android.util.Log
 import com.github.enteraname74.domain.model.Music
 import com.github.enteraname74.event.PlayerScreenEvent
-import com.github.enteraname74.viewmodel.PlayerScreenViewModelImpl
+import com.github.enteraname74.viewmodel.PlayerScreenModel
 
 /**
  * Implementation of the PlaybackController.
@@ -17,7 +17,7 @@ import com.github.enteraname74.viewmodel.PlayerScreenViewModelImpl
  */
 class PlaybackControllerImpl(
     private val context: Context,
-): PlaybackController {
+) : PlaybackController {
     override var initialList: ArrayList<Music> = ArrayList()
     override var playedList: ArrayList<Music> = ArrayList()
     override var currentMusic: Music? = null
@@ -32,10 +32,10 @@ class PlaybackControllerImpl(
 
     private val player: RemoteMusikPlayer = RemoteMusikPlayer(
         context = context,
-        playbackController =  this
+        playbackController = this
     )
 
-    var playerViewModel: PlayerScreenViewModelImpl? = null
+    override var playerViewModel: PlayerScreenModel? = null
 
     private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -46,7 +46,7 @@ class PlaybackControllerImpl(
                 next()
             } else if (intent.extras?.getBoolean(PREVIOUS) != null) {
                 previous()
-            } else if(intent.extras?.getBoolean(TOGGLE_PLAY_PAUSE) != null) {
+            } else if (intent.extras?.getBoolean(TOGGLE_PLAY_PAUSE) != null) {
                 togglePlayPause()
             }
         }
@@ -133,7 +133,10 @@ class PlaybackControllerImpl(
 
         if (shouldLaunchService) {
             val serviceIntent = Intent(context, PlayerService::class.java)
-            serviceIntent.putExtra(PlayerService.MEDIA_SESSION_TOKEN, mediaSessionManager.getToken())
+            serviceIntent.putExtra(
+                PlayerService.MEDIA_SESSION_TOKEN,
+                mediaSessionManager.getToken()
+            )
             context.startForegroundService(serviceIntent)
             shouldLaunchService = false
         }
@@ -215,12 +218,16 @@ class PlaybackControllerImpl(
         intentForUpdatingNotification.putExtra(PlayerService.UPDATE_WITH_PLAYING_STATE, isPlaying)
         context.sendBroadcast(intentForUpdatingNotification)
 
-        playerViewModel?.handler?.onEvent(PlayerScreenEvent.UpdatePlayedMusic(
-            music = currentMusic
-        ))
-        playerViewModel?.handler?.onEvent(PlayerScreenEvent.UpdateIsPlaying(
-            isPlaying = isPlaying
-        ))
+        playerViewModel?.onEvent(
+            PlayerScreenEvent.UpdatePlayedMusic(
+                music = currentMusic
+            )
+        )
+        playerViewModel?.onEvent(
+            PlayerScreenEvent.UpdateIsPlaying(
+                isPlaying = isPlaying
+            )
+        )
     }
 
     override fun skipAndRemoveCurrentSong() {
@@ -229,7 +236,7 @@ class PlaybackControllerImpl(
         val currentIndex = getIndexOfCurrentMusic()
         val nextMusic = getNextMusic(currentIndex)
 
-        playedList.removeIf{ it.id == currentMusic!!.id }
+        playedList.removeIf { it.id == currentMusic!!.id }
         initialList.removeIf { it.id == currentMusic!!.id }
 
         if (playedList.isEmpty()) stopPlayback()

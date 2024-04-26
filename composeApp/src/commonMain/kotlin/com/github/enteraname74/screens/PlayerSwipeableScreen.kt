@@ -1,18 +1,17 @@
 package com.github.enteraname74.screens
 
-import android.util.Log
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,16 +20,23 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.SwipeableState
+import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
+import androidx.compose.material.icons.rounded.Lyrics
 import androidx.compose.material.swipeable
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -43,17 +49,24 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import com.github.enteraname74.Constants
 import com.github.enteraname74.MusikContext
 import com.github.enteraname74.composable.AppImage
 import com.github.enteraname74.composable.MusikBackHandler
 import com.github.enteraname74.composable.playbuttons.ExpandedPlayButtonsComposable
 import com.github.enteraname74.composable.playbuttons.MinimisedPlayButtonsComposable
+import com.github.enteraname74.di.injectElement
+import com.github.enteraname74.event.PlayerScreenEvent
 import com.github.enteraname74.model.PlaybackController
+import com.github.enteraname74.strings.appStrings
 import com.github.enteraname74.theme.MusikColorTheme
+import com.github.enteraname74.type.FetchingState
 import com.github.enteraname74.type.PlayerScreenSheetStates
 import com.github.enteraname74.type.ScreenOrientation
-import com.github.enteraname74.viewmodel.PlayerScreenViewModel
+import com.github.enteraname74.viewmodel.PlayerScreenModel
+import io.kamel.image.KamelImage
+import io.kamel.image.asyncPainterResource
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.max
@@ -63,14 +76,15 @@ import kotlin.math.roundToInt
 @Composable
 fun PlayerSwipeableScreen(
     maxHeight: Float,
-    swipeableState: SwipeableState<PlayerScreenSheetStates>,
-    playerScreenViewModel: PlayerScreenViewModel,
-    playbackController: PlaybackController
+    playerScreenModel: PlayerScreenModel,
+    playbackController: PlaybackController = injectElement()
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val state by playerScreenViewModel.handler.state.collectAsState()
-
-    Log.d("RECOMPOSE", "RECOMPOSE ${state.isPlaying}")
+    val state by playerScreenModel.state.collectAsState()
+    val swipeableState = playerScreenModel.playerScreenSwipeableState
+    var shouldShowDialog by rememberSaveable {
+        mutableStateOf(false)
+    }
 
     MusikBackHandler(
         enabled = swipeableState.currentValue == PlayerScreenSheetStates.EXPANDED
@@ -220,12 +234,21 @@ fun PlayerSwipeableScreen(
                             end = imagePaddingStart
                         )
                 ) {
-                    AppImage(
-                        bitmap = null,
-                        size = imageSize,
-                        roundedPercent = (swipeableState.offset.value / 100).roundToInt()
-                            .coerceIn(3, 10)
-                    )
+                    val url = state.currentMusic?.albumArtworkUrl ?: ""
+                    if (url.isNotEmpty()) {
+                        KamelImage(
+                            modifier = Modifier.size(imageSize),
+                            resource = asyncPainterResource(data = url),
+                            contentDescription = null
+                        )
+                    } else {
+                        AppImage(
+                            bitmap = null,
+                            size = imageSize,
+                            roundedPercent = (swipeableState.offset.value / 100).roundToInt()
+                                .coerceIn(3, 10)
+                        )
+                    }
                 }
 
                 Column(
@@ -302,9 +325,19 @@ fun PlayerSwipeableScreen(
                                 )
                             }
                         }
-                        Spacer(
+                        Image(
+                            imageVector = Icons.Rounded.Lyrics,
+                            contentDescription = "",
                             modifier = Modifier
                                 .size(Constants.ImageSize.medium)
+                                .clickable {
+                                    playerScreenModel.onEvent(
+                                        PlayerScreenEvent.FetchLyrics
+                                    )
+                                    shouldShowDialog = true
+                                },
+                            colorFilter = ColorFilter.tint(MusikColorTheme.colorScheme.onSecondary),
+                            alpha = alphaTransition
                         )
                     }
 
@@ -374,6 +407,77 @@ fun PlayerSwipeableScreen(
                         playbackController = playbackController,
                         isPlaying = state.isPlaying
                     )
+                }
+            }
+        }
+
+        if (shouldShowDialog) {
+            Dialog(
+                onDismissRequest = { shouldShowDialog = false }
+            ) {
+                Column(
+                    modifier = Modifier
+                        .width(500.dp)
+                        .background(
+                            color = MusikColorTheme.colorScheme.secondary,
+                            shape = RoundedCornerShape(10.dp)
+                        )
+                        .padding(Constants.Spacing.medium),
+                    verticalArrangement = Arrangement.spacedBy(Constants.Spacing.medium)
+                ) {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        text = appStrings.lyrics,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        color = MusikColorTheme.colorScheme.onSecondary,
+                    )
+                    when (state.lyrics) {
+                        is FetchingState.Error -> Text(
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
+                                .verticalScroll(rememberScrollState()),
+                            text = (state.lyrics as FetchingState.Error).message,
+                            color = MusikColorTheme.colorScheme.onSecondary,
+                        )
+
+                        is FetchingState.Loading -> Text(
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
+                                .verticalScroll(rememberScrollState()),
+                            text = (state.lyrics as FetchingState.Loading).message,
+                            color = MusikColorTheme.colorScheme.onSecondary,
+                        )
+
+                        is FetchingState.Success -> Text(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
+                                .verticalScroll(rememberScrollState()),
+                            text = (state.lyrics as FetchingState.Success<String>).data,
+                            color = MusikColorTheme.colorScheme.onSecondary,
+                        )
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        TextButton(
+                            onClick = {
+                                shouldShowDialog = false
+                            }
+                        ) {
+                            Text(
+                                text = appStrings.close,
+                                color = MusikColorTheme.colorScheme.onSecondary,
+                            )
+                        }
+                    }
                 }
             }
         }

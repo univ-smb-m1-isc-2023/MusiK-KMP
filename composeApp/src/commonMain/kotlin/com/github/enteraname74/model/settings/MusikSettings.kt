@@ -1,4 +1,4 @@
-package com.github.enteraname74.model
+package com.github.enteraname74.model.settings
 
 /**
  * Represent the settings of a Musik application where we can save key-value elements.
@@ -33,4 +33,11 @@ interface MusikSettings {
      * Tries to retrieve a String related to a given key.
      */
     fun getString(key: String, defaultValue: String): String
+
+    companion object {
+        const val SETTINGS_KEY = "MUSIK_SETTINGS_KEY"
+
+        const val USERNAME = "USERNAME"
+        const val PASSWORD = "PASSWORD"
+    }
 }

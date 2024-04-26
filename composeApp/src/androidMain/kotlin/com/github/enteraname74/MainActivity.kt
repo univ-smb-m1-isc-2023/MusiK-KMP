@@ -9,33 +9,16 @@ import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.rememberSwipeableState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.core.content.ContextCompat
+import cafe.adriel.voyager.navigator.Navigator
 import com.github.enteraname74.model.PlaybackControllerImpl
-import com.github.enteraname74.screens.MainScreen
-import com.github.enteraname74.screens.PlayerSwipeableScreen
+import com.github.enteraname74.screens.UserScreen
 import com.github.enteraname74.theme.ColorThemeManager
-import com.github.enteraname74.theme.MusikColorTheme
-import com.github.enteraname74.type.PlayerScreenSheetStates
 import com.github.enteraname74.ui.theme.MusikTheme
-import com.github.enteraname74.viewmodel.MainScreenViewModelImpl
-import com.github.enteraname74.viewmodel.PlayerScreenViewModelImpl
 import org.koin.android.ext.android.inject
-import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
     private val colorThemeManager: ColorThemeManager by inject<ColorThemeManager>()
@@ -45,6 +28,13 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setContent {
+            MusikTheme {
+                Navigator(UserScreen())
+            }
+        }
+
+        /*
         setContent {
             MusikColorTheme.colorScheme = colorThemeManager.getColorTheme()
 
@@ -104,6 +94,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+        */
     }
 
     /**
@@ -134,6 +125,7 @@ class MainActivity : ComponentActivity() {
             onResult(isGranted)
         }
     }
+
     /**
      * Check and ask for missing permissions.
      */

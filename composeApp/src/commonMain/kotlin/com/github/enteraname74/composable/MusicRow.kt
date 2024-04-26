@@ -1,12 +1,13 @@
 package com.github.enteraname74.composable
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,20 +17,23 @@ import androidx.compose.ui.unit.dp
 import com.github.enteraname74.Constants
 import com.github.enteraname74.domain.model.Music
 import com.github.enteraname74.theme.MusikColorTheme
+import io.kamel.image.KamelImage
+import io.kamel.image.asyncPainterResource
 
 /**
  * Represent a row with information about of a Music.
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MusicRow(
     music: Music,
-    onClick: (Music) -> Unit
+    onClick: (Music) -> Unit,
+    onLongClick: (Music) -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick(music) }
-            .padding(Constants.Spacing.medium),
+            .combinedClickable(onClick = { onClick(music) }, onLongClick = { onLongClick(music) }),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -37,6 +41,16 @@ fun MusicRow(
             horizontalArrangement = Arrangement.spacedBy(Constants.Spacing.medium),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            if (music.albumArtworkUrl.isNotEmpty()) {
+                KamelImage(
+                    modifier = Modifier.size(75.dp),
+                    resource = asyncPainterResource(data = music.albumArtworkUrl),
+                    contentDescription = null
+                )
+            } else {
+                AppImage(bitmap = null, size = 75.dp)
+            }
+
             Column(
                 modifier = Modifier
                     .height(55.dp)

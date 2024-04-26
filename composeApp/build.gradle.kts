@@ -49,6 +49,12 @@ kotlin {
             implementation(libs.multiplatform.settings)
 
             implementation(libs.mp.filepicker)
+
+            // Voyager:
+            implementation(libs.bundles.voyager)
+
+            // Kamel:
+            implementation(libs.kamel.image)
         }
     }
 }

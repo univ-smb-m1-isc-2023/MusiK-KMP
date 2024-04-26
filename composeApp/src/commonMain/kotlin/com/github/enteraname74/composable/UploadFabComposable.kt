@@ -1,6 +1,5 @@
 package com.github.enteraname74.composable
 
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.SwipeableState
@@ -15,13 +14,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.darkrockstudios.libraries.mpfilepicker.MultipleFilePicker
 import com.github.enteraname74.domain.model.File
+import com.github.enteraname74.theme.MusikColorTheme
 import com.github.enteraname74.type.PlayerScreenSheetStates
-import kotlin.math.max
-import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -34,44 +31,31 @@ fun UploadFabComposable(
 
     var showFilePicker by remember { mutableStateOf(false) }
 
-    val fileType = listOf("mp3", "mp4", "m4a", "aac", "wav")
+    val fileType = listOf("m4a", "mp4", "mp3", "aac", "wav", "ogg")
     MultipleFilePicker(show = showFilePicker, fileExtensions = fileType) { selection ->
         showFilePicker = false
 
         selection?.let { files ->
             files.forEach { file ->
-                //val f = File(file.path)
-
-
                 try {
-                    val file = getFile(context, file.platformFile.toString())
+                    val f = getFile(
+                        context,
+                        file.platformFile.toString(),
+                        file.path.substringAfterLast('/')
+                    )
 
-                    uploadFile(file)
+                    uploadFile(f)
                 } catch (_: Exception) {
-
                 }
-
-
-                /*
-                if (p.first != null && p.second != null) {
-                    val pa = Pair(p.first, p.second)
-                    uploadFile(pa)
-                }
-                */
             }
         }
     }
+    println("THERE")
     FloatingActionButton(
         onClick = { showFilePicker = true },
-        modifier = modifier.padding(
-            end = 25.dp,
-        ).offset {
-            IntOffset(
-                x = 0,
-                y = max(playerScreenSwipeableState.offset.value.roundToInt() - 200, 0)
-            )
-        }
+        containerColor = MusikColorTheme.colorScheme.onSecondary,
+        modifier = modifier.padding(bottom = if (playerScreenSwipeableState.currentValue != PlayerScreenSheetStates.COLLAPSED) 65.dp else 0.dp)
     ) {
-        Icon(Icons.Rounded.Add, "Floating action button.")
+        Icon(Icons.Rounded.Add, "Upload button.")
     }
 }

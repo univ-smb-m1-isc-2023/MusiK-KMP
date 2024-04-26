@@ -11,6 +11,7 @@ import androidx.compose.ui.focus.FocusManager
 import com.github.enteraname74.Constants
 import com.github.enteraname74.composable.MusicRow
 import com.github.enteraname74.composable.PlayerSpacer
+import com.github.enteraname74.di.injectElement
 import com.github.enteraname74.domain.model.Music
 import com.github.enteraname74.model.PlaybackController
 import com.github.enteraname74.type.PlayerScreenSheetStates
@@ -22,7 +23,7 @@ fun SearchMusics(
     playerScreenSwipeableState: SwipeableState<PlayerScreenSheetStates>,
     searchText: String,
     musics: List<Music>,
-    playbackController: PlaybackController,
+    playbackController: PlaybackController = injectElement(),
     focusManager: FocusManager,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -50,7 +51,8 @@ fun SearchMusics(
                             playbackController.setPlayerLists(foundedMusics)
                             playbackController.setAndPlayMusic(selectedMusic)
                         }
-                    }
+                    },
+                    onLongClick = {}
                 )
             }
         }

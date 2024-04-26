@@ -3,7 +3,7 @@ package com.github.enteraname74.domain.datasource
 import com.github.enteraname74.domain.model.Music
 
 /**
- * Service for managing Musics.
+ * Data source for music information.
  */
 interface MusicInformationDataSource {
 
